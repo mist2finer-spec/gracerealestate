@@ -335,7 +335,10 @@ export const useSearchStore = create<SearchState>()(
         }),
     }),
     {
-      name: "estata-storage",
+      // Bumped from "estata-storage" → "grace-choi-storage" so old localStorage
+      // data (with old "Estata" hero headline + old phone number) is invalidated
+      // and the fresh SEED_SITE_CONTENT loads on next visit.
+      name: "grace-choi-storage",
       // Persist favorites + properties + siteContent so admin edits survive reloads.
       partialize: (state) => ({
         favorites: state.favorites,

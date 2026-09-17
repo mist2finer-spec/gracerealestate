@@ -86,8 +86,8 @@ export function Hero() {
 
   return (
     <section className="relative overflow-visible">
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
+      {/* Background image — z-0, content gets z-10 so dropdown can float above */}
+      <div className="absolute inset-0 z-0">
         <img
           src={hero.backgroundImage}
           alt="Luxury modern home exterior at dusk"
@@ -97,7 +97,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/75" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 pb-12 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-20 lg:pt-28">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-12 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-20 lg:pt-28">
         {/* Headline */}
         <div className="max-w-3xl text-white">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
