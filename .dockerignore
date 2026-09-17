@@ -1,0 +1,46 @@
+# Node / Bun
+node_modules
+.pnp
+.pnp.*
+.yarn/cache
+
+# Build output (will be re-built inside Docker)
+.next
+out
+build
+dist
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+*.pem
+
+# Env files (Docker should use --env-file or env vars)
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# CI artifacts
+*.tsbuildinfo
+next-env.d.ts
+
+# Sandbox-only files
+.zscripts
+.z-ai-config
+skills
+download
+screenshots
+scripts/images
+worklog.md
+dev.log
+dev.out.log
+server.log

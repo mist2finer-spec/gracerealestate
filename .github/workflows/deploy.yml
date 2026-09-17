@@ -1,0 +1,54 @@
+# =====================================================
+# Auto-deploy to Vercel on push to main
+# Requires VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+# as GitHub Actions secrets (set in repo settings).
+# =====================================================
+name: Deploy to Vercel
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Skip the job entirely if required secrets aren't configured
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
+
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: 📥 Install
+        run: bun install --frozen-lockfile
+
+      - name: 🧹 Lint
+        run: bun run lint
+
+      - name: 🚀 Install Vercel CLI
+        run: bun add -g vercel
+
+      - name: 🔗 Link project (if not linked)
+        run: |
+          if [ ! -f .vercel/project.json ]; then
+            vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
+          fi
+
+      - name: 🏗️ Build with Vercel
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          ESTATA_ADMIN_PASSWORD: ${{ secrets.ESTATA_ADMIN_PASSWORD }}
+
+      - name: 🚀 Deploy to production
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}

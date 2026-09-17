@@ -1,0 +1,27 @@
+# Optional docker-compose for local production testing
+# Usage:
+#   docker compose up --build
+# Then open http://localhost:3000
+version: "3.9"
+
+services:
+  estata:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # Override these in .env.docker or pass via --env-file
+      - NODE_ENV=production
+      - DATABASE_URL=file:./data/prod.db
+      - ESTATA_ADMIN_PASSWORD=${ESTATA_ADMIN_PASSWORD:-estata-admin-2024}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-change-me-in-production}
+      - NEXTAUTH_URL=http://localhost:3000
+    volumes:
+      # Persist SQLite DB across restarts
+      - estata_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  estata_data:

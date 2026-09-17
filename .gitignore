@@ -1,0 +1,80 @@
+# Dependencies
+node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production builds
+/build
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Env files (keep .env.example committed; ignore all real .env*)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Editor / OS
+.idea
+.vscode
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Local DB (SQLite) — keep prisma/ folder, ignore the db file
+*.db
+*.db-journal
+/prisma/migrations/dev/
+
+# Sandbox / agent-only files (not needed for production deployment)
+.z-ai-config
+.zscripts
+claude
+Caddyfile
+examples/
+mini-services/
+skills/
+download/
+tests/
+upload/
+
+# Internal development log
+worklog.md
+
+# Local screenshots
+screenshots/
+.git_backup_*/
+
+# Temporary image search results (dev artifacts)
+scripts/images/
