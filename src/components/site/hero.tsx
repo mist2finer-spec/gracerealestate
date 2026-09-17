@@ -85,7 +85,7 @@ export function Hero() {
     searchTab === "for-sale" ? PRICE_RANGES_SALE : PRICE_RANGES_RENT;
 
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative overflow-visible">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
@@ -112,10 +112,10 @@ export function Hero() {
           </p>
         </div>
 
-        {/* Search card */}
+        {/* Search card — relative + high z-index so the dropdown isn't covered by stats below */}
         <form
           onSubmit={handleSearch}
-          className="mt-8 rounded-xl bg-white p-2 shadow-2xl sm:mt-10"
+          className="relative z-40 mt-8 rounded-xl bg-white p-2 shadow-2xl sm:mt-10"
           id="hero-search"
         >
           {/* Buy / Rent tabs */}
@@ -135,7 +135,7 @@ export function Hero() {
               </button>
             ))}
             <div className="ml-auto hidden text-xs text-muted-foreground sm:block pr-2">
-              {searchTab === "for-sale" ? "Buying" : "Renting"} · Estata Network
+              {searchTab === "for-sale" ? "Buying" : "Renting"} · Grace Choi Network
             </div>
           </div>
 
@@ -153,7 +153,7 @@ export function Hero() {
                 className="border-0 pl-9 shadow-none focus-visible:ring-0"
               />
               {locationOpen && (
-                <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-72 overflow-auto rounded-md border border-border bg-white shadow-lg">
+                <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-72 overflow-auto rounded-md border border-border bg-white shadow-2xl">
                   <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                     Popular cities · NY & NJ
                   </div>

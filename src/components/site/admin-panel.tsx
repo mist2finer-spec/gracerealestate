@@ -337,7 +337,7 @@ export function AdminPanel() {
                   Admin Dashboard
                 </SheetTitle>
                 <SheetDescription className="text-xs">
-                  Estata · NY/NJ Property Management
+                  Grace Choi · NY/NJ Property Management
                 </SheetDescription>
               </div>
             </div>
@@ -455,7 +455,7 @@ export function AdminPanel() {
             {/* Region notice */}
             <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-sm text-foreground">
               <strong className="font-semibold">Region notice:</strong>{" "}
-              Estata only accepts listings in{" "}
+              Grace Choi only accepts listings in{" "}
               <Badge variant="secondary" className="mx-0.5">New York (NY)</Badge> and{" "}
               <Badge variant="secondary" className="mx-0.5">New Jersey (NJ)</Badge>.
               Other states will be rejected at save.

@@ -23,9 +23,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Estata — Find Your Next Home | Real Estate Made Simple",
+  title: "Grace Choi — Find Your Next Home | Real Estate Made Simple",
   description:
-    "Browse thousands of homes, condos, land, and commercial properties for sale or rent. Connect with trusted local agents and find your next place with Estata.",
+    "Browse thousands of homes, condos, land, and commercial properties for sale or rent across New York and New Jersey. Connect with trusted local agents and find your next place with Grace Choi.",
   keywords: [
     "real estate",
     "homes for sale",
@@ -33,19 +33,21 @@ export const metadata: Metadata = {
     "land for sale",
     "commercial real estate",
     "find an agent",
-    "Estata",
+    "Grace Choi",
+    "NY real estate",
+    "NJ real estate",
   ],
-  authors: [{ name: "Estata" }],
+  authors: [{ name: "Grace Choi" }],
   openGraph: {
-    title: "Estata — Find Your Next Home",
-    description: "Real estate made simple. Browse homes, condos, land, and commercial properties.",
-    siteName: "Estata",
+    title: "Grace Choi — Find Your Next Home",
+    description: "Real estate made simple. Browse homes, condos, land, and commercial properties across NY and NJ.",
+    siteName: "Grace Choi Real Estate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Estata — Find Your Next Home",
-    description: "Real estate made simple.",
+    title: "Grace Choi — Find Your Next Home",
+    description: "Real estate made simple. NY & NJ.",
   },
 };
 

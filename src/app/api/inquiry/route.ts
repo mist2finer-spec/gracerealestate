@@ -45,7 +45,7 @@ function escapeHtml(s: string): string {
 
 function buildPlainText(b: InquiryBody): string {
   const lines = [
-    "New Estata property inquiry",
+    "New Grace Choi property inquiry",
     "============================",
     "",
     `Name:       ${b.name ?? "—"}`,
@@ -84,7 +84,7 @@ function buildHtml(b: InquiryBody): string {
   <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;border:1px solid #e5e5e5;">
     <div style="background:#dc2626;color:#fff;padding:18px 24px;">
       <div style="font-size:18px;font-weight:700;">New property inquiry</div>
-      <div style="font-size:12px;opacity:0.9;margin-top:2px;">Estata NY/NJ · ${escapeHtml(
+      <div style="font-size:12px;opacity:0.9;margin-top:2px;">Grace Choi NY/NJ · ${escapeHtml(
         new Date().toLocaleString("en-US")
       )}</div>
     </div>
@@ -98,7 +98,7 @@ function buildHtml(b: InquiryBody): string {
       )}</div>
     </div>
     <div style="padding:12px 24px;font-size:11px;color:#999;background:#fafafa;border-top:1px solid #eee;">
-      Sent from the inquiry form on your Estata website.
+      Sent from the inquiry form on your Grace Choi website.
     </div>
   </div>
 </body></html>`;
@@ -127,8 +127,8 @@ export async function POST(req: NextRequest) {
       process.env.INQUIRY_FROM_EMAIL || process.env.SMTP_USER || "noreply@estata.local";
 
     const subject = body.propertyTitle
-      ? `[Estata Inquiry] ${body.propertyTitle} — from ${body.name}`
-      : `[Estata Inquiry] General question from ${body.name}`;
+      ? `[Grace Choi Inquiry] ${body.propertyTitle} — from ${body.name}`
+      : `[Grace Choi Inquiry] General question from ${body.name}`;
 
     const text = buildPlainText(body);
     const html = buildHtml(body);
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
     });
 
     await transporter.sendMail({
-      from: `"Estata Website\" <${fromEmail}>`,
+      from: `"Grace Choi Website\" <${fromEmail}>`,
       to: toEmail,
       replyTo: body.email, // reply goes directly to the inquirer
       subject,

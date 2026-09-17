@@ -346,7 +346,7 @@ export function ContentEditorInline() {
 
       {/* ============ WHY US ============ */}
       <Section
-        title="Why Choose Estata (features grid)"
+        title="Why Choose Grace Choi (features grid)"
         icon={Sparkles}
         description="Section heading + 4 feature cards"
       >

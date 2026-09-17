@@ -177,7 +177,7 @@ export const useSearchStore = create<SearchState>()(
       addProperty: (p) => {
         if (!isValidState(p.state)) {
           throw new Error(
-            `Invalid state "${p.state}". Estata only supports NY and NJ.`
+            `Invalid state "${p.state}". Grace Choi only supports NY and NJ.`
           );
         }
         const id = genId();
@@ -189,7 +189,7 @@ export const useSearchStore = create<SearchState>()(
       updateProperty: (id, patch) => {
         if (patch.state && !isValidState(patch.state)) {
           throw new Error(
-            `Invalid state "${patch.state}". Estata only supports NY and NJ.`
+            `Invalid state "${patch.state}". Grace Choi only supports NY and NJ.`
           );
         }
         set((state) => ({

@@ -1,4 +1,4 @@
-// Centralized mock data for the Estata real estate site
+// Centralized mock data for the Grace Choi real estate site
 // Coverage area: New York (NY) & New Jersey (NJ) only
 // All images are hosted on a stable CDN
 
@@ -659,7 +659,7 @@ export interface SiteContent {
 export const SEED_SITE_CONTENT: SiteContent = {
   hero: {
     badge: "Trusted by 2.1M+ NY/NJ homeowners",
-    headline: "Find a place you'll love to call home.",
+    headline: "GRACE will lead you home.\nHappy closing with GRACE.",
     subline:
       "Browse thousands of homes, condos, land, and commercial properties across New York and New Jersey — backed by 1,200+ trusted local agents.",
     backgroundImage:
@@ -705,10 +705,10 @@ export const SEED_SITE_CONTENT: SiteContent = {
     },
   ],
   whyUs: {
-    eyebrow: "Why Estata",
+    eyebrow: "Why Grace Choi",
     title: "The trusted name in NY & NJ real estate",
     description:
-      "We've helped thousands of families across New York and New Jersey find their next home. Here's what makes the Estata experience different.",
+      "We've helped thousands of families across New York and New Jersey find their next home. Here's what makes the Grace Choi experience different.",
     features: [
       {
         title: "Verified listings",
@@ -740,7 +740,7 @@ export const SEED_SITE_CONTENT: SiteContent = {
     browseAllButton: "Browse all 1,200 agents",
   },
   insights: {
-    eyebrow: "Estata Insights",
+    eyebrow: "Grace Choi Insights",
     title: "Market trends, buyer tips & more",
     description:
       "Make smarter decisions with data-driven market analysis, expert perspectives, and practical guides — written by our agents and research team.",
@@ -748,14 +748,14 @@ export const SEED_SITE_CONTENT: SiteContent = {
     articles: INSIGHTS,
   },
   cta: {
-    badge: "List with Estata",
+    badge: "List with Grace Choi",
     title: "Ready to sell or rent out your property?",
     description:
-      "Reach 12M+ qualified buyers and tenants in days, not months. Get a free, no-obligation valuation from a local Estata agent — typically in under 24 hours.",
+      "Reach 12M+ qualified buyers and tenants in days, not months. Get a free, no-obligation valuation from a local Grace Choi agent — typically in under 24 hours.",
     primaryButton: "Get a free valuation",
     secondaryButton: "See pricing",
     statValue: "12M+",
-    statLabel: "Monthly buyers searching Estata",
+    statLabel: "Monthly buyers searching Grace Choi",
     subStat1Value: "3.2%",
     subStat1Label: "Avg. days on market",
     subStat2Value: "98%",
@@ -766,9 +766,9 @@ export const SEED_SITE_CONTENT: SiteContent = {
       "The trusted name in NY/NJ real estate. Browse thousands of listings across New York and New Jersey, work with 1,200+ vetted agents, and find a place you'll love to call home.",
     newsletterTitle: "Get market insights weekly",
     newsletterSubtitle: "No spam. Unsubscribe anytime.",
-    phone: "(212) 555-0100",
+    phone: "201.282.8640",
     legalText:
-      "Estata is a fictional real estate brand created for demonstration purposes. All properties, agents, and statistics shown are illustrative only.",
+      "Grace Choi Real Estate — serving New York and New Jersey with care and expertise.",
   },
   agents: AGENTS,
 };

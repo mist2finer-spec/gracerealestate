@@ -17,8 +17,7 @@ import { useSearchStore } from "@/store/search-store";
 const NAV_LINKS = [
   { label: "Buy", href: "#listings" },
   { label: "Rent", href: "#listings" },
-  { label: "Sell", href: "#agents" },
-  { label: "Find an Agent", href: "#agents" },
+  { label: "Sell", href: "#inquiry" },
   { label: "Commercial", href: "#categories" },
   { label: "Insights", href: "#insights" },
 ];
@@ -60,7 +59,7 @@ export function Header() {
             <Building2 className="h-5 w-5" />
           </div>
           <span className="font-display text-2xl font-bold tracking-tight text-foreground">
-            Estata
+            Grace Choi
           </span>
         </Link>
 
@@ -139,7 +138,7 @@ export function Header() {
           </Button>
 
           <Button size="sm" className="hidden md:inline-flex">
-            Join Estata
+            Join Grace Choi
           </Button>
 
           {/* Mobile menu */}
@@ -161,7 +160,7 @@ export function Header() {
                     <div className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground">
                       <Building2 className="h-4 w-4" />
                     </div>
-                    <span className="font-display text-xl font-bold">Estata</span>
+                    <span className="font-display text-xl font-bold">Grace Choi</span>
                   </div>
                 </SheetTitle>
               </SheetHeader>
@@ -193,7 +192,7 @@ export function Header() {
                   <User className="mr-2 h-4 w-4" />
                   Sign In
                 </Button>
-                <Button className="w-full">Join Estata</Button>
+                <Button className="w-full">Join Grace Choi</Button>
                 <div className="mt-4 flex items-center gap-2 px-3 text-sm text-muted-foreground">
                   <Phone className="h-4 w-4" />
                   {phone}

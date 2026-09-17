@@ -6,7 +6,6 @@ import { Categories } from "@/components/site/categories";
 import { FeaturedListings } from "@/components/site/featured-listings";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { WhyUs } from "@/components/site/why-us";
-import { FindAgent } from "@/components/site/find-agent";
 import { Insights } from "@/components/site/insights";
 import { CTABanner } from "@/components/site/cta-banner";
 import { Footer } from "@/components/site/footer";
@@ -23,7 +22,6 @@ export default function Home() {
         <FeaturedListings />
         <InquirySection variant="inline" />
         <WhyUs />
-        <FindAgent />
         <Insights />
         <CTABanner />
       </main>

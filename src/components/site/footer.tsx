@@ -31,7 +31,7 @@ const COLUMNS: { title: string; links: string[] }[] = [
   },
   {
     title: "Company",
-    links: ["About Estata", "Careers", "Press Room", "Investor Relations", "Sustainability", "Contact Us"],
+    links: ["About Grace Choi", "Careers", "Press Room", "Investor Relations", "Sustainability", "Contact Us"],
   },
 ];
 
@@ -70,7 +70,7 @@ export function Footer() {
                 <Building2 className="h-5 w-5" />
               </div>
               <span className="font-display text-2xl font-bold tracking-tight">
-                Estata
+                Grace Choi
               </span>
             </Link>
             <p className="mt-3 max-w-md text-sm text-background/70">
@@ -128,7 +128,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-background/10 pt-6 sm:flex-row sm:items-center">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-background/60">
-            <span>© {new Date().getFullYear()} Estata Real Estate Network</span>
+            <span>© {new Date().getFullYear()} Grace Choi Real Estate</span>
             <span className="hidden sm:inline">·</span>
             <button
               onClick={() => toast("Privacy policy", { description: "Opening in a new tab." })}
