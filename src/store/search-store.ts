@@ -4,9 +4,13 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
   SEED_PROPERTIES,
+  SEED_SITE_CONTENT,
   PropertyListing,
   SupportedState,
+  SiteContent,
+  Agent,
   isValidState,
+  cloneContent,
 } from "@/lib/data";
 
 export type SearchTab = "for-sale" | "for-rent";
@@ -27,6 +31,15 @@ interface SearchState {
   // Property catalog — starts with SEED, can be edited by admin
   properties: PropertyListing[];
 
+  // Site content — all editable text + images on the public site
+  siteContent: SiteContent;
+
+  // ============ Inquiry form state ============
+  inquiryOpen: boolean;
+  inquiryPropertyId: string | null;
+  setInquiryOpen: (open: boolean) => void;
+  openInquiry: (propertyId?: string | null) => void;
+
   // Favorites
   favorites: string[];
   toggleFavorite: (id: string) => void;
@@ -43,6 +56,9 @@ interface SearchState {
   // Admin view state
   adminOpen: boolean;
   setAdminOpen: (open: boolean) => void;
+  // Which admin panel tab is active: "listings" or "content"
+  adminTab: "listings" | "content";
+  setAdminTab: (t: "listings" | "content") => void;
 
   // ============ Admin auth ============
   isAdmin: boolean;
@@ -54,6 +70,28 @@ interface SearchState {
   updateProperty: (id: string, patch: Partial<PropertyListing>) => void;
   deleteProperty: (id: string) => void;
   resetToSeed: () => void;
+
+  // ============ Site content editing (admin) ============
+  updateSiteContent: (patch: Partial<SiteContent>) => void;
+  updateHero: (patch: Partial<SiteContent["hero"]>) => void;
+  updateStats: (stats: SiteContent["stats"]) => void;
+  updateCategories: (categories: SiteContent["categories"]) => void;
+  updateWhyUs: (patch: Partial<SiteContent["whyUs"]>) => void;
+  updateWhyUsFeature: (
+    index: number,
+    patch: Partial<SiteContent["whyUs"]["features"][0]>
+  ) => void;
+  updateAgentSection: (patch: Partial<SiteContent["agentSection"]>) => void;
+  updateInsights: (patch: Partial<SiteContent["insights"]>) => void;
+  updateInsightArticle: (
+    id: string,
+    patch: Partial<SiteContent["insights"]["articles"][0]>
+  ) => void;
+  updateCta: (patch: Partial<SiteContent["cta"]>) => void;
+  updateFooter: (patch: Partial<SiteContent["footer"]>) => void;
+  // Agent editing (text/image/contact)
+  updateAgent: (id: string, patch: Partial<Agent>) => void;
+  resetContentToSeed: () => void;
 
   // ============ Search actions ============
   setSearchTab: (t: SearchTab) => void;
@@ -82,6 +120,16 @@ export const useSearchStore = create<SearchState>()(
       // Seed with NY/NJ demo properties
       properties: SEED_PROPERTIES,
 
+      // Seed with default editable content
+      siteContent: cloneContent(SEED_SITE_CONTENT),
+
+      // Inquiry form
+      inquiryOpen: false,
+      inquiryPropertyId: null,
+      setInquiryOpen: (open) => set({ inquiryOpen: open }),
+      openInquiry: (propertyId = null) =>
+        set({ inquiryOpen: true, inquiryPropertyId: propertyId }),
+
       favorites: [],
       toggleFavorite: (id) =>
         set((state) => ({
@@ -99,10 +147,10 @@ export const useSearchStore = create<SearchState>()(
 
       adminOpen: false,
       setAdminOpen: (open) => set({ adminOpen: open }),
+      adminTab: "listings",
+      setAdminTab: (t) => set({ adminTab: t }),
 
       // ============ Admin auth ============
-      // Read once from sessionStorage so reloads keep the session,
-      // but new browser sessions require fresh login.
       isAdmin:
         typeof window !== "undefined" &&
         sessionStorage.getItem(ADMIN_SESSION_KEY) === "1",
@@ -127,7 +175,6 @@ export const useSearchStore = create<SearchState>()(
 
       // ============ CRUD ============
       addProperty: (p) => {
-        // Enforce NY/NJ only
         if (!isValidState(p.state)) {
           throw new Error(
             `Invalid state "${p.state}". Estata only supports NY and NJ.`
@@ -163,6 +210,110 @@ export const useSearchStore = create<SearchState>()(
 
       resetToSeed: () => set({ properties: SEED_PROPERTIES }),
 
+      // ============ Site content editing ============
+      updateSiteContent: (patch) =>
+        set((state) => ({
+          siteContent: { ...state.siteContent, ...patch },
+        })),
+
+      updateHero: (patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            hero: { ...state.siteContent.hero, ...patch },
+          },
+        })),
+
+      updateStats: (stats) =>
+        set((state) => ({
+          siteContent: { ...state.siteContent, stats },
+        })),
+
+      updateCategories: (categories) =>
+        set((state) => ({
+          siteContent: { ...state.siteContent, categories },
+        })),
+
+      updateWhyUs: (patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            whyUs: { ...state.siteContent.whyUs, ...patch },
+          },
+        })),
+
+      updateWhyUsFeature: (index, patch) =>
+        set((state) => {
+          const features = [...state.siteContent.whyUs.features];
+          if (features[index]) {
+            features[index] = { ...features[index], ...patch };
+          }
+          return {
+            siteContent: {
+              ...state.siteContent,
+              whyUs: { ...state.siteContent.whyUs, features },
+            },
+          };
+        }),
+
+      updateAgentSection: (patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            agentSection: { ...state.siteContent.agentSection, ...patch },
+          },
+        })),
+
+      updateInsights: (patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            insights: { ...state.siteContent.insights, ...patch },
+          },
+        })),
+
+      updateInsightArticle: (id, patch) =>
+        set((state) => {
+          const articles = state.siteContent.insights.articles.map((a) =>
+            a.id === id ? { ...a, ...patch } : a
+          );
+          return {
+            siteContent: {
+              ...state.siteContent,
+              insights: { ...state.siteContent.insights, articles },
+            },
+          };
+        }),
+
+      updateCta: (patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            cta: { ...state.siteContent.cta, ...patch },
+          },
+        })),
+
+      updateFooter: (patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            footer: { ...state.siteContent.footer, ...patch },
+          },
+        })),
+
+      updateAgent: (id, patch) =>
+        set((state) => {
+          const agents = state.siteContent.agents.map((a) =>
+            a.id === id ? { ...a, ...patch } : a
+          );
+          return {
+            siteContent: { ...state.siteContent, agents },
+          };
+        }),
+
+      resetContentToSeed: () =>
+        set({ siteContent: cloneContent(SEED_SITE_CONTENT) }),
+
       // ============ Search actions ============
       setSearchTab: (t) => set({ searchTab: t }),
       setLocation: (v) => set({ location: v }),
@@ -185,14 +336,15 @@ export const useSearchStore = create<SearchState>()(
     }),
     {
       name: "estata-storage",
-      // Only persist favorites + properties + adminOpen. Skip isAdmin (use sessionStorage).
+      // Persist favorites + properties + siteContent so admin edits survive reloads.
       partialize: (state) => ({
         favorites: state.favorites,
         properties: state.properties,
+        siteContent: state.siteContent,
       }),
     }
   )
 );
 
 // Re-export for convenience
-export type { PropertyListing, SupportedState };
+export type { PropertyListing, SupportedState, SiteContent, Agent };

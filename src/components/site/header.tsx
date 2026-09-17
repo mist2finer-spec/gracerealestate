@@ -29,6 +29,7 @@ export function Header() {
   const setMobileNavOpen = useSearchStore((s) => s.setMobileNavOpen);
   const mobileNavOpen = useSearchStore((s) => s.mobileNavOpen);
   const setAdminOpen = useSearchStore((s) => s.setAdminOpen);
+  const phone = useSearchStore((s) => s.siteContent.footer.phone);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -119,7 +120,7 @@ export function Header() {
             }}
           >
             <Phone className="mr-1.5 h-4 w-4" />
-            (212) 555-0100
+            {phone}
           </Button>
 
           <Button
@@ -195,7 +196,7 @@ export function Header() {
                 <Button className="w-full">Join Estata</Button>
                 <div className="mt-4 flex items-center gap-2 px-3 text-sm text-muted-foreground">
                   <Phone className="h-4 w-4" />
-                  (212) 555-0100
+                  {phone}
                 </div>
               </div>
             </SheetContent>

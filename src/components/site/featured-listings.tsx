@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Heart, Filter, X } from "lucide-react";
+import { Heart, Filter, X, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PropertyCard } from "./property-card";
@@ -108,6 +108,30 @@ export function FeaturedListings() {
             </Badge>
           )}
         </div>
+
+        {/* Inquiry CTA — appears when search results are visible */}
+        {hasActiveFilters && filtered.length > 0 && (
+          <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4">
+            <div className="flex items-center gap-2">
+              <Mail className="h-5 w-5 text-primary" />
+              <div>
+                <div className="font-semibold text-foreground">
+                  Interested in any of these properties?
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Send an inquiry and the listing agent will respond within 24 hours.
+                </div>
+              </div>
+            </div>
+            <Button
+              onClick={() => useSearchStore.getState().openInquiry(null)}
+              className="gap-1.5"
+            >
+              <Mail className="h-4 w-4" />
+              Send inquiry
+            </Button>
+          </div>
+        )}
 
         {/* Filter bar */}
         <div className="mb-8 flex flex-wrap items-center gap-2">

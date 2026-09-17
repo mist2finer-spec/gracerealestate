@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { useSearchStore } from "@/store/search-store";
-import { AGENTS, formatPriceFull } from "@/lib/data";
+import { AGENTS as FALLBACK_AGENTS, formatPriceFull } from "@/lib/data";
 import { toast } from "sonner";
 
 interface PropertyDetailDialogProps {
@@ -18,9 +18,13 @@ export function PropertyDetailDialog({ propertyId, onClose }: PropertyDetailDial
   const toggleFavorite = useSearchStore((s) => s.toggleFavorite);
   const favorites = useSearchStore((s) => s.favorites);
   const properties = useSearchStore((s) => s.properties);
+  const editableAgents = useSearchStore((s) => s.siteContent.agents);
 
   const property = propertyId ? properties.find((p) => p.id === propertyId) : null;
-  const agent = property ? AGENTS.find((a) => a.id === property.agentId) : null;
+  const agent = property
+    ? editableAgents.find((a) => a.id === property.agentId) ||
+      FALLBACK_AGENTS.find((a) => a.id === property.agentId)
+    : null;
   const isFav = property ? favorites.includes(property.id) : false;
 
   const handleOpenChange = (open: boolean) => {
@@ -28,10 +32,12 @@ export function PropertyDetailDialog({ propertyId, onClose }: PropertyDetailDial
   };
 
   const handleContact = () => {
-    toast("Inquiry sent", {
-      description: `${agent?.name ?? "An agent"} will contact you about "${property?.title ?? "this property"}".`,
-    });
+    // Close this modal and open the inquiry form, pre-filled with this property
     onClose();
+    useSearchStore.getState().openInquiry(property?.id ?? null);
+    toast("Opening inquiry form", {
+      description: `Send a message to ${agent?.name ?? "the agent"} about this property.`,
+    });
   };
 
   if (!property) return null;

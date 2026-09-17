@@ -560,3 +560,221 @@ export function formatPriceFull(price: number, status?: ListingStatus): string {
 export function isValidState(state: string): state is SupportedState {
   return (SUPPORTED_STATES as readonly string[]).includes(state.toUpperCase());
 }
+
+// ============================================================
+// Editable Site Content Model
+// All text + images on the public site can be edited from admin.
+// ============================================================
+
+export interface HeroContent {
+  badge: string;
+  headline: string;
+  subline: string;
+  backgroundImage: string;
+  trustBadge1: string;
+  trustBadge2: string;
+  trustBadge3: string;
+}
+
+export interface StatItem {
+  value: string;
+  label: string;
+}
+
+export interface CategoryItem {
+  key: ListingType;
+  label: string;
+  count: string;
+  image: string;
+  description: string;
+}
+
+export interface WhyUsContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  features: { title: string; description: string }[];
+}
+
+export interface AgentSectionContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  browseAllButton: string;
+}
+
+export interface InsightItem {
+  id: string;
+  title: string;
+  excerpt: string;
+  category: "Market Trends" | "Buyer Tips" | "Seller Tips" | "Financing";
+  date: string;
+  readTime: string;
+  image: string;
+}
+
+export interface InsightsContent {
+  eyebrow: string;
+  title: string;
+  description: string;
+  allArticlesButton: string;
+  articles: InsightItem[];
+}
+
+export interface CtaContent {
+  badge: string;
+  title: string;
+  description: string;
+  primaryButton: string;
+  secondaryButton: string;
+  statValue: string;
+  statLabel: string;
+  subStat1Value: string;
+  subStat1Label: string;
+  subStat2Value: string;
+  subStat2Label: string;
+}
+
+export interface FooterContent {
+  brandDescription: string;
+  newsletterTitle: string;
+  newsletterSubtitle: string;
+  phone: string;
+  legalText: string;
+}
+
+export interface SiteContent {
+  hero: HeroContent;
+  stats: StatItem[];
+  categories: CategoryItem[];
+  whyUs: WhyUsContent;
+  agentSection: AgentSectionContent;
+  insights: InsightsContent;
+  cta: CtaContent;
+  footer: FooterContent;
+  // Agents are also editable (text + image + contact)
+  agents: Agent[];
+}
+
+export const SEED_SITE_CONTENT: SiteContent = {
+  hero: {
+    badge: "Trusted by 2.1M+ NY/NJ homeowners",
+    headline: "Find a place you'll love to call home.",
+    subline:
+      "Browse thousands of homes, condos, land, and commercial properties across New York and New Jersey — backed by 1,200+ trusted local agents.",
+    backgroundImage:
+      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98695e19f9f5.jpg",
+    trustBadge1: "Verified listings only",
+    trustBadge2: "1,200+ vetted NY/NJ agents",
+    trustBadge3: "Updated every 15 min",
+  },
+  stats: [
+    { value: "48K+", label: "NY/NJ Listings" },
+    { value: "2.1M", label: "Homes Sold" },
+    { value: "1,200", label: "Local Agents" },
+    { value: "62", label: "NY + NJ Cities" },
+  ],
+  categories: [
+    {
+      key: "house",
+      label: "Homes for Sale",
+      count: "18,420 listings",
+      image: CATEGORY_IMAGES.homes,
+      description: "Single-family houses, townhomes, and brownstones",
+    },
+    {
+      key: "condo",
+      label: "Condos & Apartments",
+      count: "22,540 listings",
+      image: CATEGORY_IMAGES.condos,
+      description: "Modern condos, lofts, and co-ops",
+    },
+    {
+      key: "land",
+      label: "Land & Lots",
+      count: "3,880 listings",
+      image: CATEGORY_IMAGES.land,
+      description: "Buildable lots and acreage in NY/NJ",
+    },
+    {
+      key: "commercial",
+      label: "Commercial",
+      count: "4,420 listings",
+      image: CATEGORY_IMAGES.commercial,
+      description: "Office, retail, and mixed-use space",
+    },
+  ],
+  whyUs: {
+    eyebrow: "Why Estata",
+    title: "The trusted name in NY & NJ real estate",
+    description:
+      "We've helped thousands of families across New York and New Jersey find their next home. Here's what makes the Estata experience different.",
+    features: [
+      {
+        title: "Verified listings",
+        description:
+          "Every listing is checked for accuracy by our quality team before going live. No stale inventory, no fake photos, no surprises at the showing.",
+      },
+      {
+        title: "Top-rated agents",
+        description:
+          "Work with the top 5% of local agents — vetted, reviewed, and rated by real buyers and sellers in your market. We match you based on your goals.",
+      },
+      {
+        title: "Secure transactions",
+        description:
+          "From offer to closing, your data and documents are protected with bank-grade encryption and a transparent audit trail.",
+      },
+      {
+        title: "Support 7 days a week",
+        description:
+          "Real humans on live chat, email, and phone from 7am to 9pm — plus a self-serve help center with 200+ articles.",
+      },
+    ],
+  },
+  agentSection: {
+    eyebrow: "Meet the team",
+    title: "Find an agent who knows your market",
+    description:
+      "Top-rated, vetted, and reviewed. Connect with a local expert who understands your neighborhood, your goals, and your timeline.",
+    browseAllButton: "Browse all 1,200 agents",
+  },
+  insights: {
+    eyebrow: "Estata Insights",
+    title: "Market trends, buyer tips & more",
+    description:
+      "Make smarter decisions with data-driven market analysis, expert perspectives, and practical guides — written by our agents and research team.",
+    allArticlesButton: "All articles",
+    articles: INSIGHTS,
+  },
+  cta: {
+    badge: "List with Estata",
+    title: "Ready to sell or rent out your property?",
+    description:
+      "Reach 12M+ qualified buyers and tenants in days, not months. Get a free, no-obligation valuation from a local Estata agent — typically in under 24 hours.",
+    primaryButton: "Get a free valuation",
+    secondaryButton: "See pricing",
+    statValue: "12M+",
+    statLabel: "Monthly buyers searching Estata",
+    subStat1Value: "3.2%",
+    subStat1Label: "Avg. days on market",
+    subStat2Value: "98%",
+    subStat2Label: "Client satisfaction",
+  },
+  footer: {
+    brandDescription:
+      "The trusted name in NY/NJ real estate. Browse thousands of listings across New York and New Jersey, work with 1,200+ vetted agents, and find a place you'll love to call home.",
+    newsletterTitle: "Get market insights weekly",
+    newsletterSubtitle: "No spam. Unsubscribe anytime.",
+    phone: "(212) 555-0100",
+    legalText:
+      "Estata is a fictional real estate brand created for demonstration purposes. All properties, agents, and statistics shown are illustrative only.",
+  },
+  agents: AGENTS,
+};
+
+// Deep clone helper so consumers can mutate freely without affecting seed
+export function cloneContent(c: SiteContent): SiteContent {
+  return JSON.parse(JSON.stringify(c));
+}
+

@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSearchStore, SearchTab } from "@/store/search-store";
-import { POPULAR_CITIES, STATS } from "@/lib/data";
+import { POPULAR_CITIES } from "@/lib/data";
 import { toast } from "sonner";
 
 const TABS: { value: SearchTab; label: string }[] = [
@@ -64,6 +64,8 @@ export function Hero() {
     setPriceRange,
     applySearch,
   } = useSearchStore();
+  const hero = useSearchStore((s) => s.siteContent.hero);
+  const stats = useSearchStore((s) => s.siteContent.stats);
 
   const [locationOpen, setLocationOpen] = useState(false);
 
@@ -87,7 +89,7 @@ export function Hero() {
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98695e19f9f5.jpg"
+          src={hero.backgroundImage}
           alt="Luxury modern home exterior at dusk"
           className="h-full w-full object-cover"
           loading="eager"
@@ -100,16 +102,13 @@ export function Hero() {
         <div className="max-w-3xl text-white">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
             <TrendingUp className="h-3.5 w-3.5" />
-            Trusted by 2.1M+ NY/NJ homeowners
+            {hero.badge}
           </div>
           <h1 className="font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-            Find a place you&apos;ll love to call home.
+            {hero.headline}
           </h1>
           <p className="mt-4 max-w-2xl text-base text-white/85 sm:text-lg">
-            Browse thousands of homes, condos, land, and commercial properties
-            across <strong className="font-semibold text-white">New York</strong> and{" "}
-            <strong className="font-semibold text-white">New Jersey</strong> —
-            backed by 1,200+ trusted local agents.
+            {hero.subline}
           </p>
         </div>
 
@@ -216,7 +215,7 @@ export function Hero() {
 
         {/* Quick stats bar */}
         <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-4">
-          {STATS.map((s) => (
+          {stats.map((s) => (
             <div
               key={s.label}
               className="rounded-lg border border-white/15 bg-white/10 p-3 text-white backdrop-blur-sm sm:p-4"
@@ -230,13 +229,13 @@ export function Hero() {
         {/* Trust signals */}
         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-white/70 sm:text-sm">
           <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck className="h-4 w-4" /> Verified listings only
+            <ShieldCheck className="h-4 w-4" /> {hero.trustBadge1}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Users className="h-4 w-4" /> 1,200+ vetted NY/NJ agents
+            <Users className="h-4 w-4" /> {hero.trustBadge2}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <TrendingUp className="h-4 w-4" /> Updated every 15 min
+            <TrendingUp className="h-4 w-4" /> {hero.trustBadge3}
           </span>
         </div>
       </div>

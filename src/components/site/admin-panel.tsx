@@ -61,6 +61,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Separator } from "@/components/ui/separator";
 import { useSearchStore } from "@/store/search-store";
+import { ContentEditorInline } from "@/components/site/content-editor-panel";
 import {
   AGENTS,
   formatPrice,
@@ -143,6 +144,8 @@ export function AdminPanel() {
     logout,
     properties,
     addProperty,
+    adminTab,
+    setAdminTab,
     updateProperty,
     deleteProperty,
     resetToSeed,
@@ -338,20 +341,49 @@ export function AdminPanel() {
                 </SheetDescription>
               </div>
             </div>
-            {isAdmin && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  logout();
-                  toast("Logged out", { description: "Admin session ended." });
-                }}
-                className="gap-1.5 text-muted-foreground"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
-            )}
+            <div className="flex items-center gap-2">
+              {isAdmin && (
+                <>
+                  {/* Tab switcher: Listings ↔ Content editor */}
+                  <div className="inline-flex rounded-md border border-border bg-background p-0.5">
+                    <button
+                      type="button"
+                      onClick={() => setAdminTab("listings")}
+                      className={`rounded px-3 py-1.5 text-xs font-semibold transition-colors ${
+                        adminTab === "listings"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      Listings
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAdminTab("content")}
+                      className={`rounded px-3 py-1.5 text-xs font-semibold transition-colors ${
+                        adminTab === "content"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      Site Content
+                    </button>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      logout();
+                      toast("Logged out", { description: "Admin session ended." });
+                    }}
+                    className="gap-1.5 text-muted-foreground"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </SheetHeader>
 
@@ -406,8 +438,11 @@ export function AdminPanel() {
               </div>
             </div>
           </div>
+        ) : adminTab === "content" ? (
+          /* ============ CONTENT EDITOR (renders inside this sheet via ContentEditorPanel mount) ============ */
+          <ContentEditorInline />
         ) : (
-          /* ============ ADMIN DASHBOARD ============ */
+          /* ============ ADMIN DASHBOARD (listings) ============ */
           <div className="flex flex-col gap-6 p-6">
             {/* Stats */}
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

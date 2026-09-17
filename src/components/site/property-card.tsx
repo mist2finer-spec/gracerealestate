@@ -142,9 +142,7 @@ export function PropertyCard({ property, onOpen }: PropertyCardProps) {
             className="h-8 px-3 text-xs"
             onClick={(e) => {
               e.stopPropagation();
-              toast("Agent contacted", {
-                description: `A specialist will reach out about "${property.title}".`,
-              });
+              useSearchStore.getState().openInquiry(property.id);
             }}
           >
             <Phone className="mr-1 h-3.5 w-3.5" />

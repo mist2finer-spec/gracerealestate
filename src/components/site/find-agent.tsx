@@ -4,15 +4,21 @@ import { Phone, Mail, Star, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { AGENTS } from "@/lib/data";
+import { useSearchStore } from "@/store/search-store";
 import { toast } from "sonner";
 
 export function FindAgent() {
+  const agentSection = useSearchStore((s) => s.siteContent.agentSection);
+  const agents = useSearchStore((s) => s.siteContent.agents);
+  const openInquiry = useSearchStore((s) => s.openInquiry);
+
   const handleContact = (name: string, method: "call" | "email") => {
-    toast(
-      method === "call" ? "Connecting your call" : "Opening your email",
-      { description: `Reaching ${name} · ${method === "call" ? "via phone" : "via email"}.` }
-    );
+    if (method === "email") {
+      openInquiry();
+      toast(`Opening inquiry form`, { description: `Reaching ${name} via email.` });
+    } else {
+      toast("Connecting your call", { description: `Reaching ${name} via phone.` });
+    }
   };
 
   return (
@@ -21,24 +27,23 @@ export function FindAgent() {
         <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Meet the team
+              {agentSection.eyebrow}
             </p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Find an agent who knows your market
+              {agentSection.title}
             </h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Top-rated, vetted, and reviewed. Connect with a local expert who
-              understands your neighborhood, your goals, and your timeline.
+              {agentSection.description}
             </p>
           </div>
           <Button variant="outline" className="shrink-0">
-            Browse all 1,200 agents
+            {agentSection.browseAllButton}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {AGENTS.map((agent) => (
+          {agents.map((agent) => (
             <Card key={agent.id} className="group overflow-hidden p-0 transition-shadow hover:shadow-lg">
               <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
                 <img

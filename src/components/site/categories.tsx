@@ -3,13 +3,13 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CATEGORIES } from "@/lib/data";
 import { useSearchStore } from "@/store/search-store";
 import { toast } from "sonner";
 
 export function Categories() {
   const setPropertyType = useSearchStore((s) => s.setPropertyType);
   const applySearch = useSearchStore((s) => s.applySearch);
+  const categories = useSearchStore((s) => s.siteContent.categories);
 
   const handleClick = (key: string, label: string) => {
     setPropertyType(key);
@@ -51,7 +51,7 @@ export function Categories() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <Card
               key={cat.key}
               className="group relative cursor-pointer overflow-hidden p-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"

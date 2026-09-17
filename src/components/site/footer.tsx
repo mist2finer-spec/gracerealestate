@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSearchStore } from "@/store/search-store";
 import { toast } from "sonner";
 
 const COLUMNS: { title: string; links: string[] }[] = [
@@ -44,6 +45,7 @@ const SOCIALS = [
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const footer = useSearchStore((s) => s.siteContent.footer);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,14 +74,12 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 max-w-md text-sm text-background/70">
-              The trusted name in NY/NJ real estate. Browse thousands of listings
-              across New York and New Jersey, work with 1,200+ vetted agents, and
-              find a place you&apos;ll love to call home.
+              {footer.brandDescription}
             </p>
 
             <div className="mt-6">
               <h4 className="text-sm font-semibold text-background">
-                Get market insights weekly
+                {footer.newsletterTitle}
               </h4>
               <form onSubmit={handleSubscribe} className="mt-2 flex gap-2 max-w-md">
                 <Input
@@ -94,7 +94,7 @@ export function Footer() {
                 </Button>
               </form>
               <p className="mt-2 text-xs text-background/50">
-                No spam. Unsubscribe anytime.
+                {footer.newsletterSubtitle}
               </p>
             </div>
           </div>
@@ -173,9 +173,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 text-xs text-background/40">
-          Estata is a fictional real estate brand created for demonstration
-          purposes. All properties, agents, and statistics shown are illustrative
-          only.
+          {footer.legalText}
         </div>
       </div>
     </footer>

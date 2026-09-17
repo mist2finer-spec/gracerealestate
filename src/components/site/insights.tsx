@@ -4,7 +4,7 @@ import { ArrowRight, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { INSIGHTS } from "@/lib/data";
+import { useSearchStore } from "@/store/search-store";
 import { toast } from "sonner";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -15,6 +15,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export function Insights() {
+  const insights = useSearchStore((s) => s.siteContent.insights);
   const handleClick = (title: string) => {
     toast("Opening article", { description: title });
   };
@@ -25,15 +26,13 @@ export function Insights() {
         <div className="mb-10 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-primary">
-              Estata Insights
+              {insights.eyebrow}
             </p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Market trends, buyer tips & more
+              {insights.title}
             </h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">
-              Make smarter decisions with data-driven market analysis, expert
-              perspectives, and practical guides — written by our agents and
-              research team.
+              {insights.description}
             </p>
           </div>
           <Button
@@ -41,13 +40,13 @@ export function Insights() {
             className="shrink-0"
             onClick={() => toast("Browse all articles", { description: "200+ guides available." })}
           >
-            All articles
+            {insights.allArticlesButton}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {INSIGHTS.map((post) => (
+          {insights.articles.map((post) => (
             <Card
               key={post.id}
               className="group cursor-pointer overflow-hidden p-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"

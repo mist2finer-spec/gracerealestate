@@ -2,9 +2,13 @@
 
 import { ArrowRight, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSearchStore } from "@/store/search-store";
 import { toast } from "sonner";
 
 export function CTABanner() {
+  const cta = useSearchStore((s) => s.siteContent.cta);
+  const openInquiry = useSearchStore((s) => s.openInquiry);
+
   return (
     <section className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -17,26 +21,25 @@ export function CTABanner() {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-background/20 bg-background/10 px-3 py-1 text-xs font-medium backdrop-blur">
                 <Home className="h-3.5 w-3.5" />
-                List with Estata
+                {cta.badge}
               </div>
               <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-                Ready to sell or rent out your property?
+                {cta.title}
               </h2>
               <p className="mt-3 max-w-xl text-background/80">
-                Reach 12M+ qualified buyers and tenants in days, not months. Get a
-                free, no-obligation valuation from a local Estata agent — typically
-                in under 24 hours.
+                {cta.description}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button
                   size="lg"
-                  onClick={() =>
-                    toast("Valuation request sent", {
-                      description: "An agent will reach out within 24 hours.",
-                    })
-                  }
+                  onClick={() => {
+                    openInquiry();
+                    toast("Opening inquiry form", {
+                      description: "Tell us about your property and we'll be in touch.",
+                    });
+                  }}
                 >
-                  Get a free valuation
+                  {cta.primaryButton}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button
@@ -49,7 +52,7 @@ export function CTABanner() {
                     })
                   }
                 >
-                  See pricing
+                  {cta.secondaryButton}
                 </Button>
               </div>
             </div>
@@ -57,19 +60,19 @@ export function CTABanner() {
             {/* Right-side stat card */}
             <div className="rounded-xl border border-background/15 bg-background/5 p-6 backdrop-blur-sm">
               <div className="font-display text-4xl font-bold text-background">
-                12M+
+                {cta.statValue}
               </div>
               <div className="text-sm text-background/70">
-                Monthly buyers searching Estata
+                {cta.statLabel}
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 border-t border-background/15 pt-4 text-sm">
                 <div>
-                  <div className="font-semibold text-background">3.2%</div>
-                  <div className="text-xs text-background/60">Avg. days on market</div>
+                  <div className="font-semibold text-background">{cta.subStat1Value}</div>
+                  <div className="text-xs text-background/60">{cta.subStat1Label}</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-background">98%</div>
-                  <div className="text-xs text-background/60">Client satisfaction</div>
+                  <div className="font-semibold text-background">{cta.subStat2Value}</div>
+                  <div className="text-xs text-background/60">{cta.subStat2Label}</div>
                 </div>
               </div>
             </div>
