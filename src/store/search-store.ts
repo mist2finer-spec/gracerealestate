@@ -57,8 +57,8 @@ interface SearchState {
   adminOpen: boolean;
   setAdminOpen: (open: boolean) => void;
   // Which admin panel tab is active: "listings" or "content"
-  adminTab: "listings" | "content";
-  setAdminTab: (t: "listings" | "content") => void;
+  adminTab: "listings" | "agents" | "content";
+  setAdminTab: (t: "listings" | "agents" | "content") => void;
 
   // ============ Admin auth ============
   isAdmin: boolean;
@@ -89,8 +89,10 @@ interface SearchState {
   ) => void;
   updateCta: (patch: Partial<SiteContent["cta"]>) => void;
   updateFooter: (patch: Partial<SiteContent["footer"]>) => void;
-  // Agent editing (text/image/contact)
+  // Agent editing (text/image/contact) + CRUD
   updateAgent: (id: string, patch: Partial<Agent>) => void;
+  addAgent: (a: Omit<Agent, "id">) => string;
+  deleteAgent: (id: string) => void;
   resetContentToSeed: () => void;
 
   // ============ Search actions ============
@@ -310,6 +312,35 @@ export const useSearchStore = create<SearchState>()(
             siteContent: { ...state.siteContent, agents },
           };
         }),
+
+      addAgent: (a) => {
+        const id = `a_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+        const newAgent: Agent = { ...a, id };
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            agents: [...state.siteContent.agents, newAgent],
+          },
+        }));
+        return id;
+      },
+
+      deleteAgent: (id) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            agents: state.siteContent.agents.filter((a) => a.id !== id),
+          },
+          // Reassign properties that referenced this agent to the first remaining agent
+          properties: state.properties.map((p) =>
+            p.agentId === id
+              ? {
+                  ...p,
+                  agentId: state.siteContent.agents.find((a) => a.id !== id)?.id ?? "",
+                }
+              : p
+          ),
+        })),
 
       resetContentToSeed: () =>
         set({ siteContent: cloneContent(SEED_SITE_CONTENT) }),

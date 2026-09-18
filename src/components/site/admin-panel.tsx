@@ -62,6 +62,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSearchStore } from "@/store/search-store";
 import { ContentEditorInline } from "@/components/site/content-editor-panel";
+import { AgentManagerInline } from "@/components/site/agent-manager";
 import {
   AGENTS,
   formatPrice,
@@ -150,6 +151,8 @@ export function AdminPanel() {
     deleteProperty,
     resetToSeed,
   } = useSearchStore();
+  // Read live agents from store (so the dropdown reflects admin add/delete)
+  const liveAgents = useSearchStore((s) => s.siteContent.agents);
 
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -344,7 +347,7 @@ export function AdminPanel() {
             <div className="flex items-center gap-2">
               {isAdmin && (
                 <>
-                  {/* Tab switcher: Listings ↔ Content editor */}
+                  {/* Tab switcher: Listings ↔ Agents ↔ Content editor */}
                   <div className="inline-flex rounded-md border border-border bg-background p-0.5">
                     <button
                       type="button"
@@ -356,6 +359,17 @@ export function AdminPanel() {
                       }`}
                     >
                       Listings
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAdminTab("agents")}
+                      className={`rounded px-3 py-1.5 text-xs font-semibold transition-colors ${
+                        adminTab === "agents"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      Agents
                     </button>
                     <button
                       type="button"
@@ -438,6 +452,9 @@ export function AdminPanel() {
               </div>
             </div>
           </div>
+        ) : adminTab === "agents" ? (
+          /* ============ AGENT MANAGER ============ */
+          <AgentManagerInline />
         ) : adminTab === "content" ? (
           /* ============ CONTENT EDITOR (renders inside this sheet via ContentEditorPanel mount) ============ */
           <ContentEditorInline />
@@ -808,7 +825,7 @@ export function AdminPanel() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {AGENTS.map((a) => (
+                      {liveAgents.map((a) => (
                         <SelectItem key={a.id} value={a.id}>
                           {a.name} · {a.office}
                         </SelectItem>

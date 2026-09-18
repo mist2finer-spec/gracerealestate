@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/site/header";
 import { Hero } from "@/components/site/hero";
+import { GuideTabs } from "@/components/site/guide-tabs";
 import { Categories } from "@/components/site/categories";
 import { FeaturedListings } from "@/components/site/featured-listings";
 import { InquirySection } from "@/components/site/inquiry-section";
@@ -18,6 +19,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
+        <GuideTabs />
         <Categories />
         <FeaturedListings />
         <InquirySection variant="inline" />
