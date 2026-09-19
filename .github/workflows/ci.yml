@@ -1,5 +1,5 @@
 # =====================================================
-# Estata CI — lint, type-check, and build on every push/PR
+# Grace Choi Real Estate CI — lint, type-check, and build on every push/PR
 # =====================================================
 name: CI
 
@@ -16,12 +16,12 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
 
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 📦 Setup Bun
         uses: oven-sh/setup-bun@v2
