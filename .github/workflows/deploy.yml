@@ -18,36 +18,53 @@ jobs:
   deploy:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    # Skip the job entirely if required secrets aren't configured.
-    # GitHub Actions does NOT allow `secrets.*` directly inside `if`,
-    # so we expose it via `env` first.
-    env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-    if: env.VERCEL_TOKEN != ''
 
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v5
 
+      - name: 🔐 Check required secrets
+        id: check_secrets
+        # GitHub Actions doesn't allow secrets.* inside job-level if,
+        # so we check here at step level and skip subsequent steps gracefully
+        # if VERCEL_TOKEN isn't configured yet.
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "::notice::VERCEL_TOKEN secret not set — skipping deploy."
+            echo "::notice::Set VERCEL_TOKEN in repo Settings → Secrets → Actions to enable auto-deploy."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "✓ VERCEL_TOKEN is configured — proceeding with deploy."
+          fi
+
       - name: 📦 Setup Bun
+        if: steps.check_secrets.outputs.skip != 'true'
         uses: oven-sh/setup-bun@v2
 
       - name: 📥 Install
+        if: steps.check_secrets.outputs.skip != 'true'
         run: bun install --frozen-lockfile
 
       - name: 🧹 Lint
+        if: steps.check_secrets.outputs.skip != 'true'
         run: bun run lint
 
       - name: 🚀 Install Vercel CLI
+        if: steps.check_secrets.outputs.skip != 'true'
         run: bun add -g vercel
 
       - name: 🔗 Link project (if not linked)
+        if: steps.check_secrets.outputs.skip != 'true'
         run: |
           if [ ! -f .vercel/project.json ]; then
             vercel link --yes --token=${{ secrets.VERCEL_TOKEN }}
           fi
 
       - name: 🏗️ Build with Vercel
+        if: steps.check_secrets.outputs.skip != 'true'
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -56,4 +73,5 @@ jobs:
           NEXT_TELEMETRY_DISABLED: "1"
 
       - name: 🚀 Deploy to production
+        if: steps.check_secrets.outputs.skip != 'true'
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
