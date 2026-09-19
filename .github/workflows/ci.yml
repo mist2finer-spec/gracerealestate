@@ -40,7 +40,7 @@ jobs:
       - name: 🏗️ Build
         run: bun run build
         env:
-          # Provide a dummy DATABASE_URL so Prisma client generation doesn't fail
+          # Provide a dummy DATABASE_URL so Prisma client generation works
           DATABASE_URL: "file:./ci.db"
           NEXT_TELEMETRY_DISABLED: "1"
 

@@ -64,8 +64,11 @@ jobs:
           fi
 
       - name: 🏗️ Build with Vercel
+        # Use 'bun run build' instead of 'vercel build' so that the prisma
+        # generate step (now part of the build script in package.json) runs
+        # before Next.js tries to import the Prisma client.
         if: steps.check_secrets.outputs.skip != 'true'
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: bun run build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
