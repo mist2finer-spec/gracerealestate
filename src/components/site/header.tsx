@@ -40,6 +40,7 @@ const NAV_LINKS = [
   { label: "Buy", href: "#listings" },
   { label: "Rent", href: "#listings" },
   { label: "Sell", href: "#inquiry" },
+  { label: "Guides", href: "/towns-and-schools" },
   { label: "Commercial", href: "#categories" },
   { label: "Insights", href: "#insights" },
 ];
@@ -65,6 +66,11 @@ export function Header() {
   }, []);
 
   const handleNavClick = (e: React.MouseEvent, href: string) => {
+    // External routes (starting with /) should navigate normally
+    if (href.startsWith("/")) {
+      setMobileNavOpen(false);
+      return; // let the default <a> navigation happen
+    }
     e.preventDefault();
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });

@@ -9,6 +9,8 @@ import {
   SupportedState,
   SiteContent,
   Agent,
+  GuidePageContent,
+  GuideSectionContent,
   isValidState,
   cloneContent,
 } from "@/lib/data";
@@ -93,6 +95,15 @@ interface SearchState {
   updateAgent: (id: string, patch: Partial<Agent>) => void;
   addAgent: (a: Omit<Agent, "id">) => string;
   deleteAgent: (id: string) => void;
+  // Guide page editing (all 6 guide pages)
+  updateGuide: (slug: string, patch: Partial<GuidePageContent>) => void;
+  updateGuideSection: (
+    slug: string,
+    sectionId: string,
+    patch: Partial<GuideSectionContent>
+  ) => void;
+  addGuideSection: (slug: string, section: Omit<GuideSectionContent, "id">) => void;
+  deleteGuideSection: (slug: string, sectionId: string) => void;
   resetContentToSeed: () => void;
 
   // ============ Search actions ============
@@ -342,6 +353,71 @@ export const useSearchStore = create<SearchState>()(
           ),
         })),
 
+      // ============ Guide page editing ============
+      updateGuide: (slug, patch) =>
+        set((state) => ({
+          siteContent: {
+            ...state.siteContent,
+            guides: {
+              ...state.siteContent.guides,
+              [slug]: { ...state.siteContent.guides[slug], ...patch },
+            },
+          },
+        })),
+
+      updateGuideSection: (slug, sectionId, patch) =>
+        set((state) => {
+          const guide = state.siteContent.guides[slug];
+          if (!guide) return state;
+          const sections = guide.sections.map((s) =>
+            s.id === sectionId ? { ...s, ...patch } : s
+          );
+          return {
+            siteContent: {
+              ...state.siteContent,
+              guides: {
+                ...state.siteContent.guides,
+                [slug]: { ...guide, sections },
+              },
+            },
+          };
+        }),
+
+      addGuideSection: (slug, section) =>
+        set((state) => {
+          const guide = state.siteContent.guides[slug];
+          if (!guide) return state;
+          const id = `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+          const newSection: GuideSectionContent = { ...section, id };
+          return {
+            siteContent: {
+              ...state.siteContent,
+              guides: {
+                ...state.siteContent.guides,
+                [slug]: { ...guide, sections: [...guide.sections, newSection] },
+              },
+            },
+          };
+        }),
+
+      deleteGuideSection: (slug, sectionId) =>
+        set((state) => {
+          const guide = state.siteContent.guides[slug];
+          if (!guide) return state;
+          return {
+            siteContent: {
+              ...state.siteContent,
+              guides: {
+                ...state.siteContent.guides,
+                [slug]: {
+                  ...guide,
+                  sections: guide.sections.filter((s) => s.id !== sectionId),
+                },
+              },
+            },
+          };
+        }),
+
       resetContentToSeed: () =>
         set({ siteContent: cloneContent(SEED_SITE_CONTENT) }),
 
@@ -366,19 +442,38 @@ export const useSearchStore = create<SearchState>()(
         }),
     }),
     {
-      // Bumped from "estata-storage" → "grace-choi-storage" so old localStorage
-      // data (with old "Estata" hero headline + old phone number) is invalidated
-      // and the fresh SEED_SITE_CONTENT loads on next visit.
-      name: "grace-choi-storage",
+      // Bumped to v3 because buyer guide content was completely rewritten.
+      // Old v2 data has empty buyer sections which caused /buy page to render
+      // blank. Bumping the key invalidates the old cache so the fresh
+      // SEED_SITE_CONTENT loads with full buyer guide content.
+      name: "grace-choi-storage-v3",
       // Persist favorites + properties + siteContent so admin edits survive reloads.
       partialize: (state) => ({
         favorites: state.favorites,
         properties: state.properties,
         siteContent: state.siteContent,
       }),
+      // Merge function: if persisted siteContent is missing the new `guides`
+      // field (old data), fall back to the seed's guides so the page doesn't crash.
+      merge: (persisted, current) => {
+        const p = persisted as Partial<SearchState>;
+        const mergedSiteContent = p.siteContent
+          ? {
+              ...current.siteContent,
+              ...p.siteContent,
+              // Ensure guides always exists (fall back to seed if missing)
+              guides: p.siteContent.guides ?? current.siteContent.guides,
+            }
+          : current.siteContent;
+        return {
+          ...current,
+          ...p,
+          siteContent: mergedSiteContent,
+        };
+      },
     }
   )
 );
 
 // Re-export for convenience
-export type { PropertyListing, SupportedState, SiteContent, Agent };
+export type { PropertyListing, SupportedState, SiteContent, Agent, GuidePageContent, GuideSectionContent };

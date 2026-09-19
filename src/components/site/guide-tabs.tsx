@@ -8,6 +8,7 @@ import {
   Landmark,
   Building2,
   BookOpen,
+  MapPin,
   ArrowRight,
 } from "lucide-react";
 
@@ -62,6 +63,13 @@ const GUIDE_TABS: GuideTab[] = [
     icon: BookOpen,
     description: "Market trends, laws, and NJ/NY-specific regulations.",
   },
+  {
+    slug: "town-school-info",
+    label: "Town/School Info",
+    href: "/towns-and-schools",
+    icon: MapPin,
+    description: "Interactive Bergen County town map with school info.",
+  },
 ];
 
 export function GuideTabs() {
@@ -82,22 +90,7 @@ export function GuideTabs() {
           </p>
         </div>
 
-        {/* Tabs bar — horizontally scrollable on mobile */}
-        <div className="no-scrollbar -mx-4 mb-6 flex gap-1 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-          {GUIDE_TABS.map((tab) => (
-            <Link
-              key={tab.slug}
-              href={tab.href}
-              className="group flex shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground/80 transition-all hover:border-primary hover:bg-primary/5 hover:text-primary"
-            >
-              <tab.icon className="h-4 w-4" />
-              {tab.label}
-              <ArrowRight className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-            </Link>
-          ))}
-        </div>
-
-        {/* Cards — short descriptions per tab */}
+        {/* Cards grid — short descriptions per guide */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {GUIDE_TABS.map((tab) => (
             <Link

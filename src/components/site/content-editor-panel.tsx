@@ -14,6 +14,8 @@ import {
   Clock,
   Eye,
   Sparkles,
+  Plus,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -831,6 +833,16 @@ export function ContentEditorInline() {
         </div>
       </Section>
 
+      {/* ============ GUIDE PAGES ============ */}
+      <Section
+        title="Guide Pages (6 sub-pages)"
+        icon={Type}
+        description="Edit content of Seller/Buyer/Rent/Mortgage/Townhouse/Real Estate Info pages"
+        defaultOpen
+      >
+        <GuidePagesEditor />
+      </Section>
+
       <div className="flex items-center gap-2 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3 text-sm">
         <Eye className="h-4 w-4 text-emerald-600" />
         <div>
@@ -839,6 +851,216 @@ export function ContentEditorInline() {
           (stored in your browser).
         </div>
       </div>
+    </div>
+  );
+}
+
+// ============ Guide Pages Editor ============
+const GUIDE_SLUGS = [
+  { slug: "sell", label: "Seller Guide (/sell)" },
+  { slug: "buy", label: "Buyer Guide (/buy)" },
+  { slug: "rent", label: "Rent Guide (/rent)" },
+  { slug: "mortgage", label: "Mortgage (/mortgage)" },
+  { slug: "townhouse-condo", label: "Townhouse/Condo (/townhouse-condo)" },
+  { slug: "real-estate-info", label: "Real Estate Info (/real-estate-info)" },
+];
+
+function GuidePagesEditor() {
+  const guides = useSearchStore((s) => s.siteContent.guides);
+  const updateGuide = useSearchStore((s) => s.updateGuide);
+  const updateGuideSection = useSearchStore((s) => s.updateGuideSection);
+  const addGuideSection = useSearchStore((s) => s.addGuideSection);
+  const deleteGuideSection = useSearchStore((s) => s.deleteGuideSection);
+  const [activeSlug, setActiveSlug] = useState<string>("sell");
+
+  const guide = guides[activeSlug];
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-xs">Select guide page to edit</Label>
+        <Select value={activeSlug} onValueChange={setActiveSlug}>
+          <SelectTrigger className="mt-1">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {GUIDE_SLUGS.map((g) => (
+              <SelectItem key={g.slug} value={g.slug}>
+                {g.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {guide && (
+        <>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 rounded-md border border-border p-3 bg-background">
+            <div className="sm:col-span-2">
+              <Label className="text-xs">Eyebrow (small label above title)</Label>
+              <Input
+                value={guide.eyebrow}
+                onChange={(e) =>
+                  updateGuide(activeSlug, { eyebrow: e.target.value })
+                }
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <Label className="text-xs">Page title (H1)</Label>
+              <Input
+                value={guide.title}
+                onChange={(e) =>
+                  updateGuide(activeSlug, { title: e.target.value })
+                }
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <Label className="text-xs">Intro paragraph</Label>
+              <Textarea
+                value={guide.intro}
+                onChange={(e) =>
+                  updateGuide(activeSlug, { intro: e.target.value })
+                }
+                rows={3}
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <Label className="text-xs">Hero image URL</Label>
+              <div className="mt-1 flex gap-2">
+                <Input
+                  value={guide.heroImage}
+                  onChange={(e) =>
+                    updateGuide(activeSlug, { heroImage: e.target.value })
+                  }
+                  placeholder="https://..."
+                  className="flex-1"
+                />
+                {guide.heroImage && (
+                  <img
+                    src={guide.heroImage}
+                    alt="Preview"
+                    className="h-9 w-12 shrink-0 rounded border border-border object-cover"
+                  />
+                )}
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs">CTA title</Label>
+              <Input
+                value={guide.ctaTitle}
+                onChange={(e) =>
+                  updateGuide(activeSlug, { ctaTitle: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label className="text-xs">CTA description</Label>
+              <Input
+                value={guide.ctaDescription}
+                onChange={(e) =>
+                  updateGuide(activeSlug, { ctaDescription: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs font-semibold">
+                Sections ({guide.sections.length})
+              </Label>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  addGuideSection(activeSlug, {
+                    title: "New Section",
+                    body: "Section content...",
+                    bullets: [],
+                  });
+                  toast.success("Section added");
+                }}
+              >
+                <Plus className="mr-1 h-3 w-3" />
+                Add Section
+              </Button>
+            </div>
+            {guide.sections.length === 0 ? (
+              <div className="rounded-md border border-dashed border-border p-4 text-center text-xs text-muted-foreground">
+                No sections yet. Add one above — these will appear on the
+                guide page as numbered cards.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {guide.sections.map((section) => (
+                  <div
+                    key={section.id}
+                    className="rounded-md border border-border p-3 bg-background space-y-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-[10px]">
+                        ID: {section.id}
+                      </Badge>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="ml-auto h-6 w-6 p-0 text-destructive hover:bg-destructive/10"
+                        onClick={() => {
+                          deleteGuideSection(activeSlug, section.id);
+                          toast.success("Section deleted");
+                        }}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <div>
+                      <Label className="text-xs">Section title</Label>
+                      <Input
+                        value={section.title}
+                        onChange={(e) =>
+                          updateGuideSection(activeSlug, section.id, {
+                            title: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Body</Label>
+                      <Textarea
+                        value={section.body}
+                        onChange={(e) =>
+                          updateGuideSection(activeSlug, section.id, {
+                            body: e.target.value,
+                          })
+                        }
+                        rows={3}
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">
+                        Bullets (one per line)
+                      </Label>
+                      <Textarea
+                        value={(section.bullets || []).join("\n")}
+                        onChange={(e) =>
+                          updateGuideSection(activeSlug, section.id, {
+                            bullets: e.target.value
+                              .split("\n")
+                              .map((s) => s.trim())
+                              .filter(Boolean),
+                          })
+                        }
+                        rows={4}
+                        placeholder="One bullet per line"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
