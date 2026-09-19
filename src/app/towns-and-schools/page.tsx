@@ -45,7 +45,7 @@ export default function TownsAndSchoolsPage() {
             <p className="mt-4 max-w-2xl text-base text-background/80 sm:text-lg">
               Explore Bergen County towns on the interactive map below.
               Hover over a town to see its name, click to view detailed
-              school, demographic, transportation, and real estate info.
+              school, demographic, transportation, and town records.
               버겐 카운티 타운 지도 — 마우스를 올려보고, 클릭하여 상세
               정보를 확인하세요.
             </p>
@@ -97,7 +97,7 @@ export default function TownsAndSchoolsPage() {
                     1. Browse the Map
                   </h3>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    마우스를 움직여 버겐 카운티의 70+ 타운을 둘러보세요.
+                    마우스를 움직여 버겐 카운티의 70개 타운을 둘러보세요.
                     Hover to highlight towns.
                   </p>
                 </CardContent>
@@ -111,7 +111,7 @@ export default function TownsAndSchoolsPage() {
                     2. Click a Town
                   </h3>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    타운을 클릭하면 학교, 인구 통계, 교통, 부동산 정보가
+                    타운을 클릭하면 학교, 인구 통계, 교통, 타운 문서가
                     표시됩니다.
                   </p>
                 </CardContent>
