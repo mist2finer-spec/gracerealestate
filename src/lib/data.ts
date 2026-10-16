@@ -677,7 +677,7 @@ export interface SiteContent {
 
 export const SEED_SITE_CONTENT: SiteContent = {
   hero: {
-    badge: "Trusted by 2.1M+ NY/NJ homeowners",
+    badge: "Trusted by NY/NJ homeowners",
     headline: "GRACE will lead you home.\nHappy closing with GRACE.",
     subline:
       "Browse thousands of homes, condos, land, and commercial properties across New York and New Jersey — backed by 1,200+ trusted local agents.",

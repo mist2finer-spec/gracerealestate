@@ -143,17 +143,24 @@ export function Header() {
             )}
           </Button>
 
-          <Button
-            variant="ghost"
-            className="hidden md:inline-flex text-sm"
-            onClick={() => {
-              const el = document.querySelector("#footer");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
+          {/* Phone number — mobile/tablet triggers a tel: call,
+              desktop scrolls to the Send an Inquiry section */}
+          <a
+            href={`tel:${phone.replace(/[^0-9+]/g, "")}`}
+            className="hidden md:inline-flex items-center text-sm font-medium px-3 py-2 rounded-md hover:bg-secondary transition-colors cursor-pointer"
+            onClick={(e) => {
+              // On desktop (hover-capable devices), intercept and scroll to inquiry
+              if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+                e.preventDefault();
+                const el = document.querySelector("#inquiry");
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+              // On touch devices, the tel: href fires naturally
             }}
           >
             <Phone className="mr-1.5 h-4 w-4" />
             {phone}
-          </Button>
+          </a>
 
           {/* Sign In / Sign Up — visible to everyone.
               Sign In opens a login dialog; entering the admin password

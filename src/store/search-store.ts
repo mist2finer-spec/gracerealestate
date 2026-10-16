@@ -36,6 +36,11 @@ interface SearchState {
   // Site content — all editable text + images on the public site
   siteContent: SiteContent;
 
+  // Guide tab enable/disable state (admin toggle)
+  guideTabEnabled: Record<string, boolean>;
+  toggleGuideTab: (slug: string) => void;
+  setGuideTabEnabled: (slug: string, enabled: boolean) => void;
+
   // ============ Inquiry form state ============
   inquiryOpen: boolean;
   inquiryPropertyId: string | null;
@@ -135,6 +140,31 @@ export const useSearchStore = create<SearchState>()(
 
       // Seed with default editable content
       siteContent: cloneContent(SEED_SITE_CONTENT),
+
+      // Guide tab enabled state — all enabled by default
+      guideTabEnabled: {
+        sell: true,
+        buy: true,
+        rent: true,
+        mortgage: true,
+        "townhouse-condo": true,
+        "real-estate-info": true,
+        "town-school-info": true,
+      },
+      toggleGuideTab: (slug) =>
+        set((state) => ({
+          guideTabEnabled: {
+            ...state.guideTabEnabled,
+            [slug]: !state.guideTabEnabled[slug],
+          },
+        })),
+      setGuideTabEnabled: (slug, enabled) =>
+        set((state) => ({
+          guideTabEnabled: {
+            ...state.guideTabEnabled,
+            [slug]: enabled,
+          },
+        })),
 
       // Inquiry form
       inquiryOpen: false,
@@ -446,12 +476,13 @@ export const useSearchStore = create<SearchState>()(
       // Old v2 data has empty buyer sections which caused /buy page to render
       // blank. Bumping the key invalidates the old cache so the fresh
       // SEED_SITE_CONTENT loads with full buyer guide content.
-      name: "grace-choi-storage-v3",
-      // Persist favorites + properties + siteContent so admin edits survive reloads.
+      name: "grace-choi-storage-v4",
+      // Persist favorites + properties + siteContent + guideTabEnabled
       partialize: (state) => ({
         favorites: state.favorites,
         properties: state.properties,
         siteContent: state.siteContent,
+        guideTabEnabled: state.guideTabEnabled,
       }),
       // Merge function: if persisted siteContent is missing the new `guides`
       // field (old data), fall back to the seed's guides so the page doesn't crash.

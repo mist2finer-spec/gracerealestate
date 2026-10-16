@@ -6,9 +6,6 @@ import {
   MapPin,
   Home,
   DollarSign,
-  TrendingUp,
-  ShieldCheck,
-  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,7 +62,6 @@ export function Hero() {
     applySearch,
   } = useSearchStore();
   const hero = useSearchStore((s) => s.siteContent.hero);
-  const stats = useSearchStore((s) => s.siteContent.stats);
 
   const [locationOpen, setLocationOpen] = useState(false);
 
@@ -101,7 +97,10 @@ export function Hero() {
         {/* Headline */}
         <div className="max-w-3xl text-white">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-            <TrendingUp className="h-3.5 w-3.5" />
+            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+              <polyline points="16 7 22 7 22 13" />
+            </svg>
             {hero.badge}
           </div>
           <h1 className="font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
@@ -212,32 +211,6 @@ export function Hero() {
             </Button>
           </div>
         </form>
-
-        {/* Quick stats bar */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:grid-cols-4">
-          {stats.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-lg border border-white/15 bg-white/10 p-3 text-white backdrop-blur-sm sm:p-4"
-            >
-              <div className="text-2xl font-bold sm:text-3xl">{s.value}</div>
-              <div className="text-xs text-white/80 sm:text-sm">{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Trust signals */}
-        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-white/70 sm:text-sm">
-          <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck className="h-4 w-4" /> {hero.trustBadge1}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Users className="h-4 w-4" /> {hero.trustBadge2}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <TrendingUp className="h-4 w-4" /> {hero.trustBadge3}
-          </span>
-        </div>
       </div>
     </section>
   );

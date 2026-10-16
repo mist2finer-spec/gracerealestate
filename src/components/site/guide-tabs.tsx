@@ -11,6 +11,8 @@ import {
   MapPin,
   ArrowRight,
 } from "lucide-react";
+import { useSearchStore } from "@/store/search-store";
+import { toast } from "sonner";
 
 interface GuideTab {
   slug: string;
@@ -73,6 +75,8 @@ const GUIDE_TABS: GuideTab[] = [
 ];
 
 export function GuideTabs() {
+  const guideTabEnabled = useSearchStore((s) => s.guideTabEnabled);
+
   return (
     <section id="guides" className="bg-background py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -92,28 +96,63 @@ export function GuideTabs() {
 
         {/* Cards grid — short descriptions per guide */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {GUIDE_TABS.map((tab) => (
-            <Link
-              key={tab.slug}
-              href={tab.href}
-              className="group rounded-xl border border-border bg-background p-5 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
-            >
-              <div className="flex items-start gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <tab.icon className="h-5 w-5" />
+          {GUIDE_TABS.map((tab) => {
+            const enabled = guideTabEnabled[tab.slug] !== false;
+
+            if (!enabled) {
+              // Disabled: grayed out, unclickable, with "Under renovation" overlay
+              return (
+                <div
+                  key={tab.slug}
+                  className="relative overflow-hidden rounded-xl border border-border bg-secondary/50 p-5 opacity-60 cursor-not-allowed"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-muted text-muted-foreground">
+                      <tab.icon className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-display text-base font-semibold leading-tight text-muted-foreground">
+                        {tab.label}
+                      </h3>
+                      <p className="mt-1 text-xs text-muted-foreground/70">
+                        {tab.description}
+                      </p>
+                    </div>
+                  </div>
+                  {/* "Under renovation" label centered inside the card */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-black/40 backdrop-blur-[1px]">
+                    <span className="rounded-md bg-red-500 px-3 py-1 text-xs font-bold text-white shadow-md">
+                      Under renovation
+                    </span>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-display text-base font-semibold leading-tight text-foreground">
-                    {tab.label}
-                  </h3>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {tab.description}
-                  </p>
+              );
+            }
+
+            // Enabled: normal interactive card
+            return (
+              <Link
+                key={tab.slug}
+                href={tab.href}
+                className="group rounded-xl border border-border bg-background p-5 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    <tab.icon className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display text-base font-semibold leading-tight text-foreground">
+                      {tab.label}
+                    </h3>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {tab.description}
+                    </p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

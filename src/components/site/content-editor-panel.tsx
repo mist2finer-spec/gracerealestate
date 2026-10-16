@@ -833,6 +833,16 @@ export function ContentEditorInline() {
         </div>
       </Section>
 
+      {/* ============ GUIDE TAB TOGGLES ============ */}
+      <Section
+        title="Guide Button Toggles"
+        icon={Layout}
+        description="Enable/disable guide buttons on the homepage. Disabled buttons show 'Under renovation'."
+        defaultOpen
+      >
+        <GuideTabToggles />
+      </Section>
+
       {/* ============ GUIDE PAGES ============ */}
       <Section
         title="Guide Pages (6 sub-pages)"
@@ -1061,6 +1071,64 @@ function GuidePagesEditor() {
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+// ============ Guide Tab Toggle Component ============
+function GuideTabToggles() {
+  const guideTabEnabled = useSearchStore((s) => s.guideTabEnabled);
+  const toggleGuideTab = useSearchStore((s) => s.toggleGuideTab);
+
+  const tabs = [
+    { slug: "sell", label: "Seller Guide" },
+    { slug: "buy", label: "Buyer Guide" },
+    { slug: "rent", label: "Rent Guide" },
+    { slug: "mortgage", label: "Mortgage" },
+    { slug: "townhouse-condo", label: "Townhouse / Condo" },
+    { slug: "real-estate-info", label: "Real Estate Info" },
+    { slug: "town-school-info", label: "Town/School Info" },
+  ];
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs text-muted-foreground mb-3">
+        Toggle each guide button on/off. When disabled, the button is grayed out
+        with a red &quot;Under renovation&quot; label on the homepage.
+      </p>
+      {tabs.map((tab) => {
+        const enabled = guideTabEnabled[tab.slug] !== false;
+        return (
+          <div
+            key={tab.slug}
+            className="flex items-center justify-between rounded-md border border-border bg-background px-3 py-2"
+          >
+            <span className={`text-sm font-medium ${enabled ? "text-foreground" : "text-muted-foreground"}`}>
+              {tab.label}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                toggleGuideTab(tab.slug);
+                toast(
+                  enabled ? "Button disabled — shows 'Under renovation'" : "Button enabled",
+                  { description: tab.label }
+                );
+              }}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                enabled ? "bg-primary" : "bg-muted"
+              }`}
+              aria-label={`Toggle ${tab.label}`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  enabled ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
