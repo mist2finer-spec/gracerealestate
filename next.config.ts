@@ -26,13 +26,6 @@ const nextConfig: NextConfig = {
       // { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
-
-  // Allow cross-origin requests from the preview domain (sandbox only).
-  // Remove `allowedDevOrigins` in production.
-  allowedDevOrigins:
-    process.env.NODE_ENV === "development"
-      ? ["*.space-z.ai", "*.chatglm.cn"]
-      : undefined,
 };
 
 export default nextConfig;

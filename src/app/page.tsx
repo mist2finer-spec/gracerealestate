@@ -7,7 +7,6 @@ import { InquirySection } from "@/components/site/inquiry-section";
 import { WhyUs } from "@/components/site/why-us";
 import { CTABanner } from "@/components/site/cta-banner";
 import { Footer } from "@/components/site/footer";
-import { AdminPanel } from "@/components/site/admin-panel";
 
 export default function Home() {
   return (
@@ -21,7 +20,6 @@ export default function Home() {
         <InquirySection variant="inline" />
       </main>
       <Footer />
-      <AdminPanel />
       {/* Inquiry dialog overlay — any "Contact" button opens it via openInquiry(). */}
       <InquirySection variant="dialog" />
     </div>

@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, Bus, FileText, School, Users, MapPin } from "luc
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhyUs } from "@/components/site/why-us";
-import { AdminPanel } from "@/components/site/admin-panel";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -173,7 +172,6 @@ export default function TownDetailPage() {
         <InquirySection variant="inline" />
       </main>
       <Footer />
-      <AdminPanel />
       <InquirySection variant="dialog" />
     </div>
   );

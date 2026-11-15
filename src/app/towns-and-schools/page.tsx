@@ -5,7 +5,6 @@ import { ArrowLeft, MapPin, School, BarChart3, Building2 } from "lucide-react";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhyUs } from "@/components/site/why-us";
-import { AdminPanel } from "@/components/site/admin-panel";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { TownMap } from "@/components/site/town-map";
 import { Button } from "@/components/ui/button";
@@ -140,7 +139,6 @@ export default function TownsAndSchoolsPage() {
       </main>
 
       <Footer />
-      <AdminPanel />
       <InquirySection variant="dialog" />
     </div>
   );

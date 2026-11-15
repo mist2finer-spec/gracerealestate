@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import {
-  RotateCcw,
+  History,
   Type,
   Layout,
   Phone,
-  Eye,
   Sparkles,
   Plus,
   X,
@@ -26,16 +25,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useSearchStore } from "@/store/search-store";
 import { toast } from "sonner";
-
-/**
- * ContentEditorPanel — page-level mount.
- * Renders nothing visually; the actual editor is shown inline inside the
- * AdminPanel sheet when adminTab === "content". This component exists so
- * page.tsx can mount it without conditional logic.
- */
-export function ContentEditorPanel() {
-  return null;
-}
+import { PublishBar, RevisionHistory } from "@/components/site/publish-bar";
 
 /** Sub-section accordion — user-friendly collapsible sections */
 function Section({
@@ -142,43 +132,19 @@ export function ContentEditorInline() {
   const handleReset = () => {
     if (
       confirm(
-        "Reset ALL site content (hero, stats, why-us, CTA, footer, guides) back to defaults?"
+        "Replace ALL content with the original defaults? (Nothing changes for visitors until you press Publish.)"
       )
     ) {
       resetContentToSeed();
-      toast("Content reset", {
-        description: "All text and images restored to defaults.",
+      toast("Defaults loaded", {
+        description: "Review, then press Publish to make them live.",
       });
     }
   };
 
   return (
     <div className="flex flex-col gap-4 p-6">
-      {/* Top action bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <div>
-            <div className="text-sm font-semibold">
-              Edit your website content
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Changes save automatically, but for now they are stored only in
-              this browser. Visitors will not see them until the database
-              (phase 2) is connected.
-            </div>
-          </div>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleReset}
-          className="gap-1.5"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-          Reset all content
-        </Button>
-      </div>
+      <PublishBar onResetDefaults={handleReset} />
 
       {/* ============ HERO SECTION ============ */}
       <Section
@@ -413,14 +379,14 @@ export function ContentEditorInline() {
         <GuidePagesEditor />
       </Section>
 
-      <div className="flex items-center gap-2 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3 text-sm">
-        <Eye className="h-4 w-4 text-emerald-600" />
-        <div>
-          <strong>Saved in this browser only.</strong>{" "}
-          Edits are kept across reloads on this device, but are not yet
-          published to visitors.
-        </div>
-      </div>
+      {/* ============ HISTORY ============ */}
+      <Section
+        title="Publish history"
+        icon={History}
+        description="Restore an earlier published version if something went wrong"
+      >
+        <RevisionHistory />
+      </Section>
     </div>
   );
 }

@@ -1,21 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHash, timingSafeEqual } from "node:crypto";
+import {
+  adminConfigured,
+  isSameOrigin,
+  passwordMatches,
+  setSessionCookie,
+} from "@/lib/admin-session";
 
 /**
- * POST /api/admin/login
- * Verifies the admin password against the ADMIN_PASSWORD environment
- * variable, so the password never ships in the client bundle.
- *
- * Phase 1 scope: this only gates the admin editor UI. Real sessions
- * (signed cookies) arrive with the database-backed content API in phase 2.
+ * POST /api/admin/login  { password }
+ * Checks the password against ADMIN_PASSWORD and sets the signed session cookie.
  */
-function sha256(s: string) {
-  return createHash("sha256").update(s, "utf8").digest();
-}
-
 export async function POST(req: NextRequest) {
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) {
+  if (!isSameOrigin(req)) {
+    return NextResponse.json({ ok: false }, { status: 403 });
+  }
+  if (!adminConfigured()) {
     return NextResponse.json(
       { ok: false, error: "ADMIN_PASSWORD is not configured on the server." },
       { status: 503 }
@@ -30,7 +29,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
-  // Compare fixed-length digests so the check runs in constant time.
-  const ok = timingSafeEqual(sha256(password), sha256(expected));
-  return NextResponse.json({ ok }, { status: ok ? 200 : 401 });
+  if (!passwordMatches(password)) {
+    // Small fixed delay to slow down password guessing.
+    await new Promise((r) => setTimeout(r, 800));
+    return NextResponse.json({ ok: false }, { status: 401 });
+  }
+
+  const res = NextResponse.json({ ok: true });
+  setSessionCookie(res);
+  return res;
 }

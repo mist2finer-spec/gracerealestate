@@ -20,13 +20,25 @@ Visitors can contact Grace through the inquiry form, which emails her directly.
 | Phase | Goal | Status |
 | ----- | ---- | ------ |
 | 1 | Narrow the scope: remove demo listings/agents/insights, empty guide pages, exposed admin password, template branding, and unused dependencies | ✅ done |
-| 2 | Make admin edits real: store site content in a database (Postgres + Prisma), signed admin session cookies, image upload | next |
+| 2 | Make admin edits real: site content in Postgres (Neon) + Prisma, signed admin session cookie, Publish / history / restore | ✅ done |
+| 2b | Image upload for the admin (Vercel Blob) | next |
 | 3 | Deploy and operate: Vercel project, env vars, SMTP app password, custom domain, inquiry email check | |
 | 4 | Expand NJStreet data: link towns from the seller/buyer guides, scheduled refresh, attribution | |
 
-> ⚠️ **Phase 1 limitation:** the admin content editor still saves edits to the
-> browser's `localStorage` only. Visitors keep seeing the default content in
-> `src/lib/data.ts` until phase 2 connects a database.
+### How content works
+
+```
+Postgres (SiteContent row) ──server render──▶ page ──▶ admin edits a draft (live preview)
+        ▲                                                     │
+        └──────────── PUT /api/admin/content  ◀── "Publish" ──┘
+```
+
+- Pages are rendered on the server with the published content and cached; publishing
+  refreshes the cache immediately.
+- Every publish is also saved to `ContentRevision` (last 20 kept), so an earlier
+  version can be restored from **Admin → Publish history**.
+- If the database is missing or unreachable, the site falls back to the defaults
+  in `src/lib/data.ts`.
 
 ---
 
@@ -41,8 +53,8 @@ bun run dev                  # http://localhost:3000
 ### Admin
 
 Click **Admin** in the footer and enter the password set in `ADMIN_PASSWORD`.
-The password is checked on the server by `POST /api/admin/login`; admin sign-in
-is disabled when the variable is not set.
+The server checks it and sets a signed, httpOnly session cookie (12 hours). Edit
+the content, look at the page behind the panel, then press **Publish**.
 
 The admin editor covers: homepage hero, stats band, "Why Grace" section, CTA
 banner, footer (email/phone/legal text), guide button toggles, and the Seller/Buyer
@@ -63,7 +75,8 @@ server console. See `.env.example`.
 | `ADMIN_PASSWORD` | yes | Admin sign-in password (server-side only) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | for email | Inquiry email delivery |
 | `INQUIRY_TO_EMAIL`, `INQUIRY_FROM_EMAIL` | optional | Recipient / sender for inquiries |
-| `DATABASE_URL` | build | Prisma client generation (DB is used from phase 2) |
+| `DATABASE_URL` | for publishing | Postgres (pooled) URL — set automatically by the Neon integration |
+| `DATABASE_URL_UNPOOLED` | optional | Direct URL for migrations (falls back to `DATABASE_URL`) |
 
 ---
 
@@ -77,7 +90,7 @@ src/
 │   ├── towns-and-schools/           # Town map + /[town] detail pages
 │   └── api/
 │       ├── inquiry/route.ts         # Inquiry email (SMTP)
-│       └── admin/login/route.ts     # Server-side admin password check
+│       └── admin/                   # login, logout, session, content (publish), revisions
 ├── components/site/
 │   ├── header.tsx  hero.tsx  guide-tabs.tsx  why-us.tsx  cta-banner.tsx  footer.tsx
 │   ├── inquiry-section.tsx          # Inline form + dialog
@@ -90,6 +103,9 @@ src/
 ├── data/                            # NJStreet town snapshot (JSON)
 ├── lib/
 │   ├── data.ts                      # Editable content model + default content
+│   ├── content-schema.ts            # Validation / normalization of published content
+│   ├── content-server.ts            # Read (cached) / publish / restore — server only
+│   ├── admin-session.ts             # Signed session cookie helpers
 │   └── town-data.ts                 # Town data helpers
 └── store/search-store.ts            # Zustand store (content, admin, UI state)
 scripts/import-njstreet.py           # NJStreet town data importer
@@ -99,20 +115,32 @@ scripts/import-njstreet.py           # NJStreet town data importer
 
 ```bash
 bun run dev         # Dev server on port 3000
-bun run build       # prisma generate + next build
+bun run build       # prisma generate (+ migrate deploy if DATABASE_URL is Postgres) + next build
+bun run db:migrate  # create a new migration after editing prisma/schema.prisma (dev)
 bun run start       # Run the standalone production build
 bun run lint        # ESLint
 bun run typecheck   # tsc --noEmit
 ```
 
-## Deployment
+## Deployment (Vercel + Neon)
 
-The `Deploy to Vercel` workflow runs on pushes to `main` once the repository
-secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` are set
-(it skips itself otherwise). Set `ADMIN_PASSWORD` and the `SMTP_*` variables in
-the Vercel project's environment settings — they are needed at runtime.
+1. Import this repository at [vercel.com/new](https://vercel.com/new). Vercel's GitHub
+   integration then deploys every push (`main` = production, other branches = previews).
+2. In the Vercel project, open **Storage → Create Database → Neon** (free plan is fine
+   for testing) and connect it to the project. This sets `DATABASE_URL` and
+   `DATABASE_URL_UNPOOLED`.
+3. Add `ADMIN_PASSWORD` (and the `SMTP_*` variables for email) under
+   **Settings → Environment Variables**.
+4. Redeploy. The build runs `prisma migrate deploy`, which creates the tables.
 
-A `Dockerfile` and `docker-compose.yml` are also included for self-hosting.
+> Vercel's free Hobby plan is for non-commercial use; a live business site needs a
+> paid plan or another host. Testing on Hobby is fine.
+
+A `Dockerfile` and `docker-compose.yml` are also included for self-hosting
+(set `DATABASE_URL` to a Postgres server).
+
+**Windows note:** building on an exFAT drive fails with
+`failed to create junction point` (exFAT has no junctions). Build from an NTFS drive.
 
 ---
 

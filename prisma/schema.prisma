@@ -1,32 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Grace Choi Real Estate — database schema (PostgreSQL, e.g. Neon).
+//
+// DATABASE_URL           pooled connection, used by the running app
+// DATABASE_URL_UNPOOLED  direct connection, used by `prisma migrate`
+// (both are created automatically by the Neon integration on Vercel;
+//  scripts/prebuild.mjs falls back to DATABASE_URL when it is missing)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
+/// The currently published site content. A single row with id "main".
+model SiteContent {
+  id        String   @id
+  data      Json
   updatedAt DateTime @updatedAt
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+/// Snapshot saved on every publish, so a previous version can be restored.
+model ContentRevision {
+  id        Int      @id @default(autoincrement())
+  data      Json
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
 }

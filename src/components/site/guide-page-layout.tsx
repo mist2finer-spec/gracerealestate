@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, CheckCircle2, List, X, Calculator, ArrowUp } fro
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhyUs } from "@/components/site/why-us";
-import { AdminPanel } from "@/components/site/admin-panel";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { useSearchStore } from "@/store/search-store";
 import { Button } from "@/components/ui/button";
@@ -368,7 +367,6 @@ export function GuidePageLayout({
       )}
 
       <Footer />
-      <AdminPanel />
       <InquirySection variant="dialog" />
     </div>
   );

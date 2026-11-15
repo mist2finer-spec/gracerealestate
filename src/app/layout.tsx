@@ -3,6 +3,8 @@ import { Inter, Playfair_Display, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
+import { ContentHydrator } from "@/components/site/content-hydrator";
+import { getPublishedContent } from "@/lib/content-server";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -50,15 +52,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Published site content (cached; refreshed when the admin publishes).
+  const content = await getPublishedContent();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${playfair.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        {children}
+        <ContentHydrator initial={content}>{children}</ContentHydrator>
         <SonnerToaster richColors position="top-right" />
         <Toaster />
       </body>
