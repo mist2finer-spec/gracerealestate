@@ -6,7 +6,6 @@ import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhyUs } from "@/components/site/why-us";
 import { AdminPanel } from "@/components/site/admin-panel";
-import { ContentEditorPanel } from "@/components/site/content-editor-panel";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { TownMap } from "@/components/site/town-map";
 import { Button } from "@/components/ui/button";
@@ -55,7 +54,7 @@ export default function TownsAndSchoolsPage() {
                 variant="secondary"
                 className="gap-1.5"
                 onClick={() => {
-                  useSearchStore.getState().openInquiry(null);
+                  useSearchStore.getState().openInquiry();
                 }}
               >
                 Ask about a town
@@ -142,7 +141,6 @@ export default function TownsAndSchoolsPage() {
 
       <Footer />
       <AdminPanel />
-      <ContentEditorPanel />
       <InquirySection variant="dialog" />
     </div>
   );

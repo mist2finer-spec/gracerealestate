@@ -23,31 +23,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Grace Choi — Find Your Next Home | Real Estate Made Simple",
+  title: "Grace Choi Real Estate — Bergen County, NJ | 버겐 카운티 부동산",
   description:
-    "Browse thousands of homes, condos, land, and commercial properties for sale or rent across New York and New Jersey. Connect with trusted local agents and find your next place with Grace Choi.",
+    "Bilingual (Korean / English) real estate guidance for buyers and sellers in Bergen County, New Jersey: seller and buyer guides, NJ closing cost calculators, and town & school information.",
   keywords: [
-    "real estate",
-    "homes for sale",
-    "condos",
-    "land for sale",
-    "commercial real estate",
-    "find an agent",
     "Grace Choi",
-    "NY real estate",
-    "NJ real estate",
+    "Bergen County real estate",
+    "NJ realtor",
+    "Korean realtor NJ",
+    "버겐 카운티 부동산",
+    "뉴저지 한인 부동산",
+    "NJ closing costs",
+    "Bergen County schools",
   ],
   authors: [{ name: "Grace Choi" }],
   openGraph: {
-    title: "Grace Choi — Find Your Next Home",
-    description: "Real estate made simple. Browse homes, condos, land, and commercial properties across NY and NJ.",
+    title: "Grace Choi Real Estate — Bergen County, NJ",
+    description: "Bilingual seller & buyer guidance, closing cost calculators, and town & school info for Bergen County.",
     siteName: "Grace Choi Real Estate",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Grace Choi — Find Your Next Home",
-    description: "Real estate made simple. NY & NJ.",
+    title: "Grace Choi Real Estate — Bergen County, NJ",
+    description: "Bilingual real estate guidance for Bergen County, NJ.",
   },
 };
 

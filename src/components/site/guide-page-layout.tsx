@@ -7,7 +7,6 @@ import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhyUs } from "@/components/site/why-us";
 import { AdminPanel } from "@/components/site/admin-panel";
-import { ContentEditorPanel } from "@/components/site/content-editor-panel";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { useSearchStore } from "@/store/search-store";
 import { Button } from "@/components/ui/button";
@@ -328,7 +327,7 @@ export function GuidePageLayout({
                       variant="secondary"
                       className="gap-1.5"
                       onClick={() => {
-                        useSearchStore.getState().openInquiry(null);
+                        useSearchStore.getState().openInquiry();
                       }}
                     >
                       Send an inquiry
@@ -370,7 +369,6 @@ export function GuidePageLayout({
 
       <Footer />
       <AdminPanel />
-      <ContentEditorPanel />
       <InquirySection variant="dialog" />
     </div>
   );

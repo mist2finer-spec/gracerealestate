@@ -1,5 +1,5 @@
 # =====================================================
-# Estata — Multi-stage Docker build
+# Grace Choi Real Estate — Multi-stage Docker build
 # Produces a minimal production image (~150MB)
 # =====================================================
 FROM node:20-alpine AS deps

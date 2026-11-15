@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
 
     const toEmail = process.env.INQUIRY_TO_EMAIL || DEFAULT_TO;
     const fromEmail =
-      process.env.INQUIRY_FROM_EMAIL || process.env.SMTP_USER || "noreply@estata.local";
+      process.env.INQUIRY_FROM_EMAIL || process.env.SMTP_USER || DEFAULT_TO;
 
     const subject = body.propertyTitle
       ? `[Grace Choi Inquiry] ${body.propertyTitle} — from ${body.name}`

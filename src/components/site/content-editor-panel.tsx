@@ -2,16 +2,10 @@
 
 import { useState } from "react";
 import {
-  Image as ImageIcon,
   RotateCcw,
-  Save,
   Type,
   Layout,
   Phone,
-  Mail,
-  Star,
-  Calendar,
-  Clock,
   Eye,
   Sparkles,
   Plus,
@@ -139,13 +133,8 @@ export function ContentEditorInline() {
   const siteContent = useSearchStore((s) => s.siteContent);
   const updateHero = useSearchStore((s) => s.updateHero);
   const updateStats = useSearchStore((s) => s.updateStats);
-  const updateCategories = useSearchStore((s) => s.updateCategories);
   const updateWhyUs = useSearchStore((s) => s.updateWhyUs);
   const updateWhyUsFeature = useSearchStore((s) => s.updateWhyUsFeature);
-  const updateAgentSection = useSearchStore((s) => s.updateAgentSection);
-  const updateAgent = useSearchStore((s) => s.updateAgent);
-  const updateInsights = useSearchStore((s) => s.updateInsights);
-  const updateInsightArticle = useSearchStore((s) => s.updateInsightArticle);
   const updateCta = useSearchStore((s) => s.updateCta);
   const updateFooter = useSearchStore((s) => s.updateFooter);
   const resetContentToSeed = useSearchStore((s) => s.resetContentToSeed);
@@ -153,7 +142,7 @@ export function ContentEditorInline() {
   const handleReset = () => {
     if (
       confirm(
-        "Reset ALL site content (hero, stats, categories, agents, insights, CTA, footer) back to defaults? Your custom listings will be preserved."
+        "Reset ALL site content (hero, stats, why-us, CTA, footer, guides) back to defaults?"
       )
     ) {
       resetContentToSeed();
@@ -174,8 +163,9 @@ export function ContentEditorInline() {
               Edit your website content
             </div>
             <div className="text-xs text-muted-foreground">
-              All changes save automatically and appear instantly on the live
-              site. Edits persist in your browser.
+              Changes save automatically, but for now they are stored only in
+              this browser. Visitors will not see them until the database
+              (phase 2) is connected.
             </div>
           </div>
         </div>
@@ -194,7 +184,7 @@ export function ContentEditorInline() {
       <Section
         title="Hero Section (top of homepage)"
         icon={Type}
-        description="Headline, subtext, background image, and trust badges"
+        description="Headline, subtext, and background image"
         defaultOpen
       >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -223,24 +213,6 @@ export function ContentEditorInline() {
               label=""
               value={siteContent.hero.backgroundImage}
               onChange={(v) => updateHero({ backgroundImage: v })}
-            />
-          </Field>
-          <Field label="Trust badge 1 (with checkmark icon)">
-            <Input
-              value={siteContent.hero.trustBadge1}
-              onChange={(e) => updateHero({ trustBadge1: e.target.value })}
-            />
-          </Field>
-          <Field label="Trust badge 2 (with users icon)">
-            <Input
-              value={siteContent.hero.trustBadge2}
-              onChange={(e) => updateHero({ trustBadge2: e.target.value })}
-            />
-          </Field>
-          <Field label="Trust badge 3 (with chart icon)">
-            <Input
-              value={siteContent.hero.trustBadge3}
-              onChange={(e) => updateHero({ trustBadge3: e.target.value })}
             />
           </Field>
         </div>
@@ -277,67 +249,6 @@ export function ContentEditorInline() {
                     const next = [...siteContent.stats];
                     next[i] = { ...next[i], label: e.target.value };
                     updateStats(next);
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* ============ CATEGORIES ============ */}
-      <Section
-        title="Browse by Category (4 cards)"
-        icon={Layout}
-        description="Labels, counts, descriptions, and images for each category"
-      >
-        <div className="space-y-3">
-          {siteContent.categories.map((cat, i) => (
-            <div
-              key={cat.key}
-              className="grid grid-cols-1 gap-2 rounded-md border border-border p-3 sm:grid-cols-2"
-            >
-              <div>
-                <Label className="text-xs">Label</Label>
-                <Input
-                  value={cat.label}
-                  onChange={(e) => {
-                    const next = [...siteContent.categories];
-                    next[i] = { ...next[i], label: e.target.value };
-                    updateCategories(next);
-                  }}
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Count text</Label>
-                <Input
-                  value={cat.count}
-                  onChange={(e) => {
-                    const next = [...siteContent.categories];
-                    next[i] = { ...next[i], count: e.target.value };
-                    updateCategories(next);
-                  }}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Label className="text-xs">Description</Label>
-                <Input
-                  value={cat.description}
-                  onChange={(e) => {
-                    const next = [...siteContent.categories];
-                    next[i] = { ...next[i], description: e.target.value };
-                    updateCategories(next);
-                  }}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <ImageField
-                  label="Category image URL"
-                  value={cat.image}
-                  onChange={(v) => {
-                    const next = [...siteContent.categories];
-                    next[i] = { ...next[i], image: v };
-                    updateCategories(next);
                   }}
                 />
               </div>
@@ -404,310 +315,6 @@ export function ContentEditorInline() {
         </div>
       </Section>
 
-      {/* ============ AGENTS ============ */}
-      <Section
-        title="Agents (4 agent cards)"
-        icon={Star}
-        description="Names, titles, phones, emails, photos, specialties"
-      >
-        <div className="space-y-3">
-          {siteContent.agents.map((agent) => (
-            <div
-              key={agent.id}
-              className="grid grid-cols-1 gap-2 rounded-md border border-border p-3 sm:grid-cols-2"
-            >
-              <div className="flex items-center gap-2 sm:col-span-2">
-                <img
-                  src={agent.image}
-                  alt={agent.name}
-                  className="h-12 w-12 rounded-full object-cover"
-                />
-                <div className="font-semibold">{agent.name}</div>
-              </div>
-              <div>
-                <Label className="text-xs">Name</Label>
-                <Input
-                  value={agent.name}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { name: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Title</Label>
-                <Input
-                  value={agent.title}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { title: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">
-                  <Phone className="inline h-3 w-3" /> Phone
-                </Label>
-                <Input
-                  value={agent.phone}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { phone: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">
-                  <Mail className="inline h-3 w-3" /> Email
-                </Label>
-                <Input
-                  value={agent.email}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { email: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Office location</Label>
-                <Input
-                  value={agent.office}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { office: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Rating (1-5)</Label>
-                <Input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="5"
-                  value={agent.rating}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { rating: Number(e.target.value) })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Sales count</Label>
-                <Input
-                  type="number"
-                  min="0"
-                  value={agent.sales}
-                  onChange={(e) =>
-                    updateAgent(agent.id, { sales: Number(e.target.value) })
-                  }
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Label className="text-xs">
-                  Specialties (comma-separated)
-                </Label>
-                <Input
-                  value={agent.specialties.join(", ")}
-                  onChange={(e) =>
-                    updateAgent(agent.id, {
-                      specialties: e.target.value
-                        .split(",")
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    })
-                  }
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <ImageField
-                  label="Agent photo URL"
-                  value={agent.image}
-                  onChange={(v) => updateAgent(agent.id, { image: v })}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* ============ AGENT SECTION HEADER ============ */}
-      <Section
-        title="Find an Agent — section header"
-        icon={Type}
-        description="The heading above the agent cards"
-      >
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Field label="Eyebrow">
-            <Input
-              value={siteContent.agentSection.eyebrow}
-              onChange={(e) =>
-                updateAgentSection({ eyebrow: e.target.value })
-              }
-            />
-          </Field>
-          <Field label="Browse-all button label">
-            <Input
-              value={siteContent.agentSection.browseAllButton}
-              onChange={(e) =>
-                updateAgentSection({ browseAllButton: e.target.value })
-              }
-            />
-          </Field>
-          <Field label="Section title" full>
-            <Input
-              value={siteContent.agentSection.title}
-              onChange={(e) =>
-                updateAgentSection({ title: e.target.value })
-              }
-            />
-          </Field>
-          <Field label="Section description" full>
-            <Textarea
-              value={siteContent.agentSection.description}
-              onChange={(e) =>
-                updateAgentSection({ description: e.target.value })
-              }
-              rows={2}
-            />
-          </Field>
-        </div>
-      </Section>
-
-      {/* ============ INSIGHTS ============ */}
-      <Section
-        title="Market Insights (3 article cards)"
-        icon={Calendar}
-        description="Section header + 3 article cards"
-      >
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Field label="Eyebrow">
-            <Input
-              value={siteContent.insights.eyebrow}
-              onChange={(e) => updateInsights({ eyebrow: e.target.value })}
-            />
-          </Field>
-          <Field label="All articles button">
-            <Input
-              value={siteContent.insights.allArticlesButton}
-              onChange={(e) =>
-                updateInsights({ allArticlesButton: e.target.value })
-              }
-            />
-          </Field>
-          <Field label="Section title" full>
-            <Input
-              value={siteContent.insights.title}
-              onChange={(e) => updateInsights({ title: e.target.value })}
-            />
-          </Field>
-          <Field label="Section description" full>
-            <Textarea
-              value={siteContent.insights.description}
-              onChange={(e) =>
-                updateInsights({ description: e.target.value })
-              }
-              rows={2}
-            />
-          </Field>
-        </div>
-        <Separator className="my-3" />
-        <div className="space-y-3">
-          {siteContent.insights.articles.map((article) => (
-            <div
-              key={article.id}
-              className="grid grid-cols-1 gap-2 rounded-md border border-border p-3 sm:grid-cols-2"
-            >
-              <div className="sm:col-span-2 flex items-center gap-2">
-                <img
-                  src={article.image}
-                  alt={article.title}
-                  className="h-10 w-14 rounded object-cover"
-                />
-                <Badge variant="outline" className="text-xs">
-                  {article.category}
-                </Badge>
-              </div>
-              <div className="sm:col-span-2">
-                <Label className="text-xs">Title</Label>
-                <Input
-                  value={article.title}
-                  onChange={(e) =>
-                    updateInsightArticle(article.id, {
-                      title: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Label className="text-xs">Excerpt</Label>
-                <Textarea
-                  value={article.excerpt}
-                  onChange={(e) =>
-                    updateInsightArticle(article.id, {
-                      excerpt: e.target.value,
-                    })
-                  }
-                  rows={2}
-                />
-              </div>
-              <div>
-                <Label className="text-xs">
-                  <Calendar className="inline h-3 w-3" /> Date
-                </Label>
-                <Input
-                  value={article.date}
-                  onChange={(e) =>
-                    updateInsightArticle(article.id, { date: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">
-                  <Clock className="inline h-3 w-3" /> Read time
-                </Label>
-                <Input
-                  value={article.readTime}
-                  onChange={(e) =>
-                    updateInsightArticle(article.id, {
-                      readTime: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <Label className="text-xs">Category</Label>
-                <Select
-                  value={article.category}
-                  onValueChange={(v) =>
-                    updateInsightArticle(article.id, {
-                      category: v as
-                        | "Market Trends"
-                        | "Buyer Tips"
-                        | "Seller Tips"
-                        | "Financing",
-                    })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Market Trends">Market Trends</SelectItem>
-                    <SelectItem value="Buyer Tips">Buyer Tips</SelectItem>
-                    <SelectItem value="Seller Tips">Seller Tips</SelectItem>
-                    <SelectItem value="Financing">Financing</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="sm:col-span-2">
-                <ImageField
-                  label="Article image URL"
-                  value={article.image}
-                  onChange={(v) =>
-                    updateInsightArticle(article.id, { image: v })
-                  }
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
       {/* ============ CTA BANNER ============ */}
       <Section
         title="CTA Banner (Ready to sell?)"
@@ -747,43 +354,6 @@ export function ContentEditorInline() {
               rows={3}
             />
           </Field>
-          <Separator className="my-2 sm:col-span-2" />
-          <Field label="Big stat — Value">
-            <Input
-              value={siteContent.cta.statValue}
-              onChange={(e) => updateCta({ statValue: e.target.value })}
-            />
-          </Field>
-          <Field label="Big stat — Label">
-            <Input
-              value={siteContent.cta.statLabel}
-              onChange={(e) => updateCta({ statLabel: e.target.value })}
-            />
-          </Field>
-          <Field label="Sub-stat 1 — Value">
-            <Input
-              value={siteContent.cta.subStat1Value}
-              onChange={(e) => updateCta({ subStat1Value: e.target.value })}
-            />
-          </Field>
-          <Field label="Sub-stat 1 — Label">
-            <Input
-              value={siteContent.cta.subStat1Label}
-              onChange={(e) => updateCta({ subStat1Label: e.target.value })}
-            />
-          </Field>
-          <Field label="Sub-stat 2 — Value">
-            <Input
-              value={siteContent.cta.subStat2Value}
-              onChange={(e) => updateCta({ subStat2Value: e.target.value })}
-            />
-          </Field>
-          <Field label="Sub-stat 2 — Label">
-            <Input
-              value={siteContent.cta.subStat2Label}
-              onChange={(e) => updateCta({ subStat2Label: e.target.value })}
-            />
-          </Field>
         </div>
       </Section>
 
@@ -791,7 +361,7 @@ export function ContentEditorInline() {
       <Section
         title="Footer"
         icon={Type}
-        description="Brand description, newsletter text, phone, legal text"
+        description="Brand description, email, phone, legal text"
       >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Brand description" full>
@@ -801,20 +371,10 @@ export function ContentEditorInline() {
               rows={3}
             />
           </Field>
-          <Field label="Newsletter title">
+          <Field label="Email (shown in footer)">
             <Input
-              value={siteContent.footer.newsletterTitle}
-              onChange={(e) =>
-                updateFooter({ newsletterTitle: e.target.value })
-              }
-            />
-          </Field>
-          <Field label="Newsletter subtitle">
-            <Input
-              value={siteContent.footer.newsletterSubtitle}
-              onChange={(e) =>
-                updateFooter({ newsletterSubtitle: e.target.value })
-              }
+              value={siteContent.footer.email}
+              onChange={(e) => updateFooter({ email: e.target.value })}
             />
           </Field>
           <Field label="Phone number (shown in header + footer)">
@@ -845,9 +405,9 @@ export function ContentEditorInline() {
 
       {/* ============ GUIDE PAGES ============ */}
       <Section
-        title="Guide Pages (6 sub-pages)"
+        title="Guide Pages (Seller / Buyer)"
         icon={Type}
-        description="Edit content of Seller/Buyer/Rent/Mortgage/Townhouse/Real Estate Info pages"
+        description="Edit content of the Seller and Buyer guide pages"
         defaultOpen
       >
         <GuidePagesEditor />
@@ -856,9 +416,9 @@ export function ContentEditorInline() {
       <div className="flex items-center gap-2 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3 text-sm">
         <Eye className="h-4 w-4 text-emerald-600" />
         <div>
-          <strong>All changes are saved automatically.</strong>{" "}
-          Close this panel to view the live site. Edits persist across reloads
-          (stored in your browser).
+          <strong>Saved in this browser only.</strong>{" "}
+          Edits are kept across reloads on this device, but are not yet
+          published to visitors.
         </div>
       </div>
     </div>
@@ -869,10 +429,6 @@ export function ContentEditorInline() {
 const GUIDE_SLUGS = [
   { slug: "sell", label: "Seller Guide (/sell)" },
   { slug: "buy", label: "Buyer Guide (/buy)" },
-  { slug: "rent", label: "Rent Guide (/rent)" },
-  { slug: "mortgage", label: "Mortgage (/mortgage)" },
-  { slug: "townhouse-condo", label: "Townhouse/Condo (/townhouse-condo)" },
-  { slug: "real-estate-info", label: "Real Estate Info (/real-estate-info)" },
 ];
 
 function GuidePagesEditor() {
@@ -1083,10 +639,6 @@ function GuideTabToggles() {
   const tabs = [
     { slug: "sell", label: "Seller Guide" },
     { slug: "buy", label: "Buyer Guide" },
-    { slug: "rent", label: "Rent Guide" },
-    { slug: "mortgage", label: "Mortgage" },
-    { slug: "townhouse-condo", label: "Townhouse / Condo" },
-    { slug: "real-estate-info", label: "Real Estate Info" },
     { slug: "town-school-info", label: "Town/School Info" },
   ];
 

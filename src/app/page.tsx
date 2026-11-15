@@ -3,15 +3,11 @@
 import { Header } from "@/components/site/header";
 import { Hero } from "@/components/site/hero";
 import { GuideTabs } from "@/components/site/guide-tabs";
-import { Categories } from "@/components/site/categories";
-import { FeaturedListings } from "@/components/site/featured-listings";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { WhyUs } from "@/components/site/why-us";
-import { Insights } from "@/components/site/insights";
 import { CTABanner } from "@/components/site/cta-banner";
 import { Footer } from "@/components/site/footer";
 import { AdminPanel } from "@/components/site/admin-panel";
-import { ContentEditorPanel } from "@/components/site/content-editor-panel";
 
 export default function Home() {
   return (
@@ -20,18 +16,13 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <GuideTabs />
-        <Categories />
-        <FeaturedListings />
-        <InquirySection variant="inline" />
         <WhyUs />
-        <Insights />
         <CTABanner />
+        <InquirySection variant="inline" />
       </main>
       <Footer />
       <AdminPanel />
-      <ContentEditorPanel />
-      {/* Inquiry dialog overlay — always rendered so any "Contact" button
-          can pop it up via openInquiry() in the store. */}
+      {/* Inquiry dialog overlay — any "Contact" button opens it via openInquiry(). */}
       <InquirySection variant="dialog" />
     </div>
   );

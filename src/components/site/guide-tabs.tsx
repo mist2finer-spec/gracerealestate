@@ -4,15 +4,10 @@ import Link from "next/link";
 import {
   Home,
   Search,
-  Key,
-  Landmark,
-  Building2,
-  BookOpen,
   MapPin,
   ArrowRight,
 } from "lucide-react";
 import { useSearchStore } from "@/store/search-store";
-import { toast } from "sonner";
 
 interface GuideTab {
   slug: string;
@@ -38,34 +33,6 @@ const GUIDE_TABS: GuideTab[] = [
     description: "From pre-approval to closing — step-by-step guidance.",
   },
   {
-    slug: "rent",
-    label: "Rent Guide",
-    href: "/rent",
-    icon: Key,
-    description: "Find rentals, understand leases, and move in smoothly.",
-  },
-  {
-    slug: "mortgage",
-    label: "Mortgage",
-    href: "/mortgage",
-    icon: Landmark,
-    description: "Rates, calculators, and pre-approval in under 24 hours.",
-  },
-  {
-    slug: "townhouse-condo",
-    label: "Townhouse / Condo",
-    href: "/townhouse-condo",
-    icon: Building2,
-    description: "Browse townhomes, condos, co-ops, and HOA details.",
-  },
-  {
-    slug: "real-estate-info",
-    label: "Real Estate Info",
-    href: "/real-estate-info",
-    icon: BookOpen,
-    description: "Market trends, laws, and NJ/NY-specific regulations.",
-  },
-  {
     slug: "town-school-info",
     label: "Town/School Info",
     href: "/towns-and-schools",
@@ -86,11 +53,11 @@ export function GuideTabs() {
             Guides & Resources
           </p>
           <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Everything you need to buy, sell, rent, or invest
+            Everything you need to buy or sell in Bergen County
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground mx-auto">
             Pick a topic to dive into detailed guides, calculators, and
-            local market insights for New York and New Jersey.
+            local town information for Bergen County, New Jersey.
           </p>
         </div>
 

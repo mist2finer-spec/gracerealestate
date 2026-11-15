@@ -7,7 +7,6 @@ import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { WhyUs } from "@/components/site/why-us";
 import { AdminPanel } from "@/components/site/admin-panel";
-import { ContentEditorPanel } from "@/components/site/content-editor-panel";
 import { InquirySection } from "@/components/site/inquiry-section";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -148,7 +147,7 @@ function TownDetails({ town }: { town: TownRecord }) {
           <div className="rounded-2xl bg-primary p-6 text-primary-foreground sm:p-8">
             <h2 className="font-display text-2xl font-bold">Interested in {town.name}?</h2>
             <p className="mt-2 text-sm text-primary-foreground/85">매물이나 지역 정보가 궁금하다면 Grace Choi 에이전트에게 문의하세요.</p>
-            <Button size="lg" variant="secondary" className="mt-5" onClick={() => useSearchStore.getState().openInquiry(null)}>Send an inquiry</Button>
+            <Button size="lg" variant="secondary" className="mt-5" onClick={() => useSearchStore.getState().openInquiry()}>Send an inquiry</Button>
           </div>
         </div>
       </div>
@@ -175,7 +174,6 @@ export default function TownDetailPage() {
       </main>
       <Footer />
       <AdminPanel />
-      <ContentEditorPanel />
       <InquirySection variant="dialog" />
     </div>
   );

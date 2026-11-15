@@ -1,19 +1,19 @@
 "use client";
 
-import { ArrowRight, Home } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Home, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSearchStore } from "@/store/search-store";
-import { toast } from "sonner";
 
 export function CTABanner() {
   const cta = useSearchStore((s) => s.siteContent.cta);
+  const footer = useSearchStore((s) => s.siteContent.footer);
   const openInquiry = useSearchStore((s) => s.openInquiry);
 
   return (
     <section className="bg-background py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-2xl bg-foreground px-6 py-12 text-background sm:px-12 sm:py-16">
-          {/* Decorative gradient */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/30 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-24 -left-10 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
 
@@ -26,55 +26,42 @@ export function CTABanner() {
               <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
                 {cta.title}
               </h2>
-              <p className="mt-3 max-w-xl text-background/80">
-                {cta.description}
-              </p>
+              <p className="mt-3 max-w-xl text-background/80">{cta.description}</p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  onClick={() => {
-                    openInquiry();
-                    toast("Opening inquiry form", {
-                      description: "Tell us about your property and we'll be in touch.",
-                    });
-                  }}
-                >
+                <Button size="lg" onClick={() => openInquiry()}>
                   {cta.primaryButton}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button
+                  asChild
                   size="lg"
                   variant="outline"
                   className="border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background"
-                  onClick={() =>
-                    toast("Pricing guide ready", {
-                      description: "Check your downloads.",
-                    })
-                  }
                 >
-                  {cta.secondaryButton}
+                  <Link href="/towns-and-schools">{cta.secondaryButton}</Link>
                 </Button>
               </div>
             </div>
 
-            {/* Right-side stat card */}
-            <div className="rounded-xl border border-background/15 bg-background/5 p-6 backdrop-blur-sm">
-              <div className="font-display text-4xl font-bold text-background">
-                {cta.statValue}
-              </div>
-              <div className="text-sm text-background/70">
-                {cta.statLabel}
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-background/15 pt-4 text-sm">
-                <div>
-                  <div className="font-semibold text-background">{cta.subStat1Value}</div>
-                  <div className="text-xs text-background/60">{cta.subStat1Label}</div>
-                </div>
-                <div>
-                  <div className="font-semibold text-background">{cta.subStat2Value}</div>
-                  <div className="text-xs text-background/60">{cta.subStat2Label}</div>
-                </div>
-              </div>
+            {/* Direct contact card */}
+            <div className="space-y-3 rounded-xl border border-background/15 bg-background/5 p-6 backdrop-blur-sm">
+              <div className="font-display text-2xl font-bold">Grace Choi</div>
+              <a
+                href={`tel:${footer.phone.replace(/[^0-9+]/g, "")}`}
+                className="flex items-center gap-2 text-sm text-background/80 hover:text-background"
+              >
+                <Phone className="h-4 w-4" />
+                {footer.phone}
+              </a>
+              {footer.email && (
+                <a
+                  href={`mailto:${footer.email}`}
+                  className="flex items-center gap-2 break-all text-sm text-background/80 hover:text-background"
+                >
+                  <Mail className="h-4 w-4 shrink-0" />
+                  {footer.email}
+                </a>
+              )}
             </div>
           </div>
         </div>

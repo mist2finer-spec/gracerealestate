@@ -2,22 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Building2,
-  Heart,
-  Menu,
-  Phone,
-  Search,
-  ShieldCheck,
-  User,
-  X,
-  Lock,
-  LogOut,
-} from "lucide-react";
+import { Building2, Mail, Menu, Phone, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetContent,
@@ -25,37 +11,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { useSearchStore } from "@/store/search-store";
-import { toast } from "sonner";
 
 const NAV_LINKS = [
-  { label: "Buy", href: "#listings" },
-  { label: "Rent", href: "#listings" },
-  { label: "Sell", href: "#inquiry" },
-  { label: "Guides", href: "/towns-and-schools" },
-  { label: "Commercial", href: "#categories" },
-  { label: "Insights", href: "#insights" },
+  { label: "Seller Guide", href: "/sell" },
+  { label: "Buyer Guide", href: "/buy" },
+  { label: "Towns & Schools", href: "/towns-and-schools" },
 ];
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [signInOpen, setSignInOpen] = useState(false);
-  const [pw, setPw] = useState("");
-  const favorites = useSearchStore((s) => s.favorites);
   const setMobileNavOpen = useSearchStore((s) => s.setMobileNavOpen);
   const mobileNavOpen = useSearchStore((s) => s.mobileNavOpen);
   const setAdminOpen = useSearchStore((s) => s.setAdminOpen);
+  const openInquiry = useSearchStore((s) => s.openInquiry);
   const isAdmin = useSearchStore((s) => s.isAdmin);
-  const login = useSearchStore((s) => s.login);
-  const logout = useSearchStore((s) => s.logout);
   const phone = useSearchStore((s) => s.siteContent.footer.phone);
 
   useEffect(() => {
@@ -65,17 +35,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent, href: string) => {
-    // External routes (starting with /) should navigate normally
-    if (href.startsWith("/")) {
-      setMobileNavOpen(false);
-      return; // let the default <a> navigation happen
-    }
-    e.preventDefault();
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMobileNavOpen(false);
-  };
+  const telHref = `tel:${phone.replace(/[^0-9+]/g, "")}`;
 
   return (
     <header
@@ -99,93 +59,32 @@ export function Header() {
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-1">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
+            <Link
+              key={link.href}
               href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
               className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-secondary hover:text-foreground"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
         {/* Right actions */}
         <div className="flex items-center gap-1 sm:gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden sm:inline-flex"
-            aria-label="Search"
-            onClick={() => {
-              const el = document.querySelector("#hero-search");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            <Search className="h-5 w-5" />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative hidden sm:inline-flex"
-            aria-label="Saved favorites"
-            onClick={() => {
-              const el = document.querySelector("#listings");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            <Heart className="h-5 w-5" />
-            {favorites.length > 0 && (
-              <Badge className="absolute -right-1 -top-1 h-5 min-w-5 px-1 text-[10px]">
-                {favorites.length}
-              </Badge>
-            )}
-          </Button>
-
-          {/* Phone number — mobile/tablet triggers a tel: call,
-              desktop scrolls to the Send an Inquiry section */}
           <a
-            href={`tel:${phone.replace(/[^0-9+]/g, "")}`}
-            className="hidden md:inline-flex items-center text-sm font-medium px-3 py-2 rounded-md hover:bg-secondary transition-colors cursor-pointer"
-            onClick={(e) => {
-              // On desktop (hover-capable devices), intercept and scroll to inquiry
-              if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-                e.preventDefault();
-                const el = document.querySelector("#inquiry");
-                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-              }
-              // On touch devices, the tel: href fires naturally
-            }}
+            href={telHref}
+            className="hidden md:inline-flex items-center text-sm font-medium px-3 py-2 rounded-md hover:bg-secondary transition-colors"
           >
             <Phone className="mr-1.5 h-4 w-4" />
             {phone}
           </a>
 
-          {/* Sign In / Sign Up — visible to everyone.
-              Sign In opens a login dialog; entering the admin password
-              activates admin mode (Admin button appears). */}
-          <Button
-            variant="outline"
-            size="sm"
-            className="hidden md:inline-flex"
-            onClick={() => setSignInOpen(true)}
-          >
-            <User className="mr-1.5 h-4 w-4" />
-            {isAdmin ? "Account" : "Sign In"}
+          <Button size="sm" className="hidden md:inline-flex gap-1.5" onClick={() => openInquiry()}>
+            <Mail className="h-4 w-4" />
+            Contact Grace
           </Button>
 
-          {!isAdmin && (
-            <Button
-              size="sm"
-              className="hidden md:inline-flex"
-              onClick={() => setSignInOpen(true)}
-            >
-              Sign Up
-            </Button>
-          )}
-
-          {/* Admin button — only visible when logged in as admin */}
+          {/* Admin button — only visible when signed in as admin */}
           {isAdmin && (
             <Button
               variant="ghost"
@@ -201,12 +100,7 @@ export function Header() {
           {/* Mobile menu */}
           <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
             <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="lg:hidden"
-                aria-label="Open menu"
-              >
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -223,39 +117,33 @@ export function Header() {
               </SheetHeader>
               <nav className="mt-6 flex flex-col gap-1 px-4">
                 {NAV_LINKS.map((link) => (
-                  <a
-                    key={link.label}
+                  <Link
+                    key={link.href}
                     href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
+                    onClick={() => setMobileNavOpen(false)}
                     className="rounded-md px-3 py-3 text-base font-medium text-foreground/90 transition-colors hover:bg-secondary"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </nav>
               <div className="mt-6 flex flex-col gap-2 px-4">
                 <Button
-                  variant="outline"
-                  className="w-full justify-start"
+                  className="w-full gap-1.5"
                   onClick={() => {
                     setMobileNavOpen(false);
-                    setSignInOpen(true);
+                    openInquiry();
                   }}
                 >
-                  <User className="mr-2 h-4 w-4" />
-                  {isAdmin ? "Account" : "Sign In"}
+                  <Mail className="h-4 w-4" />
+                  Contact Grace
                 </Button>
-                {!isAdmin && (
-                  <Button
-                    className="w-full"
-                    onClick={() => {
-                      setMobileNavOpen(false);
-                      setSignInOpen(true);
-                    }}
-                  >
-                    Sign Up
-                  </Button>
-                )}
+                <Button asChild variant="outline" className="w-full gap-1.5">
+                  <a href={telHref}>
+                    <Phone className="h-4 w-4" />
+                    {phone}
+                  </a>
+                </Button>
                 {isAdmin && (
                   <Button
                     variant="outline"
@@ -269,138 +157,11 @@ export function Header() {
                     Admin Dashboard
                   </Button>
                 )}
-                <div className="mt-4 flex items-center gap-2 px-3 text-sm text-muted-foreground">
-                  <Phone className="h-4 w-4" />
-                  {phone}
-                </div>
               </div>
             </SheetContent>
           </Sheet>
         </div>
       </div>
-
-      {/* Sign In / Sign Up dialog */}
-      <Dialog open={signInOpen} onOpenChange={setSignInOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {isAdmin ? "Your account" : "Sign in to Grace Choi"}
-            </DialogTitle>
-            <DialogDescription>
-              {isAdmin
-                ? "You are currently signed in as an admin."
-                : "Enter your credentials. Admins get access to the dashboard."}
-            </DialogDescription>
-          </DialogHeader>
-
-          {isAdmin ? (
-            <div className="space-y-3 py-2">
-              <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-sm">
-                <div className="flex items-center gap-2 font-semibold text-primary">
-                  <ShieldCheck className="h-4 w-4" />
-                  Admin mode active
-                </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  The Admin button is now visible in the header. Use it to
-                  manage listings, agents, and site content.
-                </p>
-              </div>
-              <Button
-                className="w-full"
-                onClick={() => {
-                  setSignInOpen(false);
-                  setAdminOpen(true);
-                }}
-              >
-                Open Admin Dashboard
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full gap-1.5"
-                onClick={() => {
-                  logout();
-                  setSignInOpen(false);
-                  toast("Signed out", { description: "Admin session ended." });
-                }}
-              >
-                <LogOut className="h-4 w-4" />
-                Sign out
-              </Button>
-            </div>
-          ) : (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (login(pw)) {
-                  toast.success("Signed in as admin", {
-                    description: "Admin button is now visible in the header.",
-                  });
-                  setSignInOpen(false);
-                  setPw("");
-                } else {
-                  toast.error("Sign in failed", {
-                    description: "Incorrect password. Please try again.",
-                  });
-                }
-              }}
-              className="space-y-3 py-2"
-            >
-              <div>
-                <Label htmlFor="signin-email" className="text-xs">
-                  Email
-                </Label>
-                <Input
-                  id="signin-email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="signin-pw" className="text-xs">
-                  Password
-                </Label>
-                <Input
-                  id="signin-pw"
-                  type="password"
-                  value={pw}
-                  onChange={(e) => setPw(e.target.value)}
-                  placeholder="Enter password"
-                  className="mt-1"
-                  autoFocus
-                />
-              </div>
-              <Button type="submit" className="w-full gap-1.5">
-                <Lock className="h-4 w-4" />
-                Sign In
-              </Button>
-              <p className="text-center text-xs text-muted-foreground">
-                Don&apos;t have an account?{" "}
-                <button
-                  type="button"
-                  className="font-medium text-primary hover:underline"
-                  onClick={() =>
-                    toast("Sign Up coming soon", {
-                      description: "Self-serve registration is not yet enabled.",
-                    })
-                  }
-                >
-                  Sign up
-                </button>
-              </p>
-              <div className="rounded-md border border-border bg-secondary/50 p-2 text-xs text-muted-foreground">
-                <p className="font-semibold text-foreground">Admin demo</p>
-                <p className="mt-0.5">
-                  Password:{" "}
-                  <code className="rounded bg-background px-1 py-0.5">
-                    estata-admin-2024
-                  </code>
-                </p>
-              </div>
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
     </header>
   );
 }

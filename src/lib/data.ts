@@ -1,569 +1,9 @@
-// Centralized mock data for the Grace Choi real estate site
-// Coverage area: New York (NY) & New Jersey (NJ) only
-// All images are hosted on a stable CDN
-
-export const IMAGES = {
-  hero: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98695e19f9f5.jpg",
-  heroAlt1: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8e30e66b1b0c.jpg",
-  heroAlt2: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b2668cfa601b.jpg",
-  kitchen1: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3021aa3fd22d.png",
-  kitchen2: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4b0af0ce13af.jpg",
-};
-
-export const CATEGORY_IMAGES = {
-  homes: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4bfabf251d6f.jpg",
-  condos: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/defaed2b5b75.jpg",
-  land: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/277feec00017.jpeg",
-  commercial: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1ba97698b57c.jpg",
-};
-
-export const AGENT_IMAGES = [
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a48728d28489.jpg",
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7158f8974b8c.jpg",
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/86f745a3253a.jpg",
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0fe5acc47b8d.jpg",
-];
-
-export const INSIGHTS_IMAGES = [
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d4a79604eb37.jpg",
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/26dddc9c4dae.png",
-  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7fb95a35f51d.png",
-];
-
-// ============================================================
-// Region: NY & NJ ONLY
-// ============================================================
-export const SUPPORTED_STATES = ["NY", "NJ"] as const;
-export type SupportedState = (typeof SUPPORTED_STATES)[number];
-
-export const STATE_LABELS: Record<SupportedState, string> = {
-  NY: "New York",
-  NJ: "New Jersey",
-};
-
-// Popular cities for autocomplete — NY & NJ only
-export const POPULAR_CITIES = [
-  // New York
-  "Manhattan, NY",
-  "Brooklyn, NY",
-  "Queens, NY",
-  "Bronx, NY",
-  "Staten Island, NY",
-  "Long Island City, NY",
-  "Astoria, NY",
-  "Yonkers, NY",
-  "Buffalo, NY",
-  "Rochester, NY",
-  "Hoboken, NY",
-  "White Plains, NY",
-  // New Jersey
-  "Jersey City, NJ",
-  "Hoboken, NJ",
-  "Newark, NJ",
-  "Princeton, NJ",
-  "Edison, NJ",
-  "Trenton, NJ",
-  "Atlantic City, NJ",
-  "Hoboken, NJ",
-  "Camden, NJ",
-  "Paterson, NJ",
-  "Cherry Hill, NJ",
-  "Morristown, NJ",
-];
-
-export type ListingStatus = "for-sale" | "for-rent";
-export type ListingType = "house" | "condo" | "land" | "commercial";
-
-export interface PropertyListing {
-  id: string;
-  title: string;
-  address: string;
-  city: string;
-  state: SupportedState;
-  zip: string;
-  price: number;
-  status: ListingStatus;
-  type: ListingType;
-  beds: number;
-  baths: number;
-  sqft: number;
-  lotSize?: string;
-  yearBuilt: number;
-  image: string;
-  gallery: string[];
-  featured?: boolean;
-  isNew?: boolean;
-  agentId: string;
-  description: string;
-  amenities: string[];
-}
-
-// Default seed listings — all in NY & NJ
-export const SEED_PROPERTIES: PropertyListing[] = [
-  {
-    id: "p1",
-    title: "Tribeca Luxury Loft with Skyline Views",
-    address: "142 Duane St",
-    city: "Manhattan",
-    state: "NY",
-    zip: "10013",
-    price: 2_850_000,
-    status: "for-sale",
-    type: "condo",
-    beds: 2,
-    baths: 2,
-    sqft: 1850,
-    yearBuilt: 2019,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98695e19f9f5.jpg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98695e19f9f5.jpg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3021aa3fd22d.png",
-    ],
-    featured: true,
-    isNew: true,
-    agentId: "a1",
-    description:
-      "Tribeca loft with floor-to-ceiling windows framing downtown Manhattan. Open chef's kitchen with Sub-Zero and Wolf appliances. Building features 24/7 concierge, fitness center, and rooftop terrace.",
-    amenities: ["Skyline View", "Concierge", "Gym", "Roof Deck", "Doorman"],
-  },
-  {
-    id: "p2",
-    title: "Park Slope Brownstone Family Home",
-    address: "275 Garfield Pl",
-    city: "Brooklyn",
-    state: "NY",
-    zip: "11215",
-    price: 1_985_000,
-    status: "for-sale",
-    type: "house",
-    beds: 4,
-    baths: 3,
-    sqft: 2980,
-    lotSize: "0.18 ac",
-    yearBuilt: 1910,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4bfabf251d6f.jpg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4bfabf251d6f.jpg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3021aa3fd22d.png",
-    ],
-    featured: true,
-    agentId: "a3",
-    description:
-      "Classic Park Slope brownstone on a tree-lined block steps from Prospect Park. Original woodwork, restored stained glass, and a renovated chef's kitchen. Garden-level apartment for rental income.",
-    amenities: ["Garden Apartment", "Original Woodwork", "Fireplace", "Renovated Kitchen", "Backyard"],
-  },
-  {
-    id: "p3",
-    title: "Jersey City Waterfront Penthouse",
-    address: "800 Harbor Blvd #PH2",
-    city: "Jersey City",
-    state: "NJ",
-    zip: "07310",
-    price: 1_450_000,
-    status: "for-sale",
-    type: "condo",
-    beds: 2,
-    baths: 2,
-    sqft: 1620,
-    yearBuilt: 2020,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/defaed2b5b75.jpg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/defaed2b5b75.jpg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4b0af0ce13af.jpg",
-    ],
-    featured: true,
-    isNew: true,
-    agentId: "a2",
-    description:
-      "Penthouse-level condo with unobstructed Manhattan skyline views across the Hudson. Floor-to-ceiling windows, private terrace, and designer finishes. Building offers pool, gym, and 24-hr concierge.",
-    amenities: ["Skyline View", "Terrace", "Pool", "Gym", "Concierge"],
-  },
-  {
-    id: "p4",
-    title: "Hoboken Modern Studio Apartment",
-    address: "14 Washington St #5F",
-    city: "Hoboken",
-    state: "NJ",
-    zip: "07030",
-    price: 2_900,
-    status: "for-rent",
-    type: "condo",
-    beds: 1,
-    baths: 1,
-    sqft: 680,
-    yearBuilt: 2018,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/97ce4879fca1.jpg",
-    gallery: ["https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/97ce4879fca1.jpg"],
-    featured: true,
-    isNew: true,
-    agentId: "a3",
-    description:
-      "Stylish one-bedroom steps from the PATH train and Hoboken waterfront. In-unit laundry, hardwood floors, and a private balcony. Pet-friendly building with roof deck.",
-    amenities: ["Balcony", "In-Unit Laundry", "Roof Deck", "Pet Friendly", "Doorman"],
-  },
-  {
-    id: "p5",
-    title: "Williamsburg Industrial Loft",
-    address: "55 Wythe Ave #4F",
-    city: "Brooklyn",
-    state: "NY",
-    zip: "11249",
-    price: 5_800,
-    status: "for-rent",
-    type: "condo",
-    beds: 2,
-    baths: 2,
-    sqft: 1240,
-    yearBuilt: 2015,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/511ca9a7b809.jpeg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/511ca9a7b809.jpeg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4b0af0ce13af.jpg",
-    ],
-    agentId: "a3",
-    description:
-      "Converted warehouse loft with exposed brick, 12-ft ceilings, and oversized windows. Modern kitchen with stainless appliances. Steps from restaurants, galleries, and the East River park.",
-    amenities: ["Exposed Brick", "High Ceilings", "Doorman", "Gym", "Roof Deck"],
-  },
-  {
-    id: "p6",
-    title: "Hamptons Waterfront Estate",
-    address: "120 Dune Rd",
-    city: "Southampton",
-    state: "NY",
-    zip: "11968",
-    price: 8_950_000,
-    status: "for-sale",
-    type: "house",
-    beds: 6,
-    baths: 7,
-    sqft: 6500,
-    lotSize: "1.2 ac",
-    yearBuilt: 2021,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d54395ad66df.jpg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d54395ad66df.jpg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3021aa3fd22d.png",
-    ],
-    featured: true,
-    isNew: true,
-    agentId: "a4",
-    description:
-      "Direct oceanfront estate with private beach access. Walls of glass open to an infinity pool overlooking the Atlantic. Designer finishes throughout, plus a private gym, spa, and media room.",
-    amenities: ["Beach Access", "Infinity Pool", "Gym", "Spa", "Media Room", "Smart Home"],
-  },
-  {
-    id: "p7",
-    title: "Princeton Estate on Acreage",
-    address: "88 Cherry Hill Rd",
-    city: "Princeton",
-    state: "NJ",
-    zip: "08540",
-    price: 2_450_000,
-    status: "for-sale",
-    type: "house",
-    beds: 5,
-    baths: 4,
-    sqft: 5100,
-    lotSize: "2.5 ac",
-    yearBuilt: 1998,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/86de6931631a.jpg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/86de6931631a.jpg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3021aa3fd22d.png",
-    ],
-    featured: true,
-    agentId: "a1",
-    description:
-      "Stately colonial on 2.5 landscaped acres in Princeton. Gourmet kitchen, sun-filled family room, and primary suite with sitting area. Three-car garage and finished basement.",
-    amenities: ["2.5 Acres", "3-Car Garage", "Finished Basement", "Gourmet Kitchen", "Fireplace"],
-  },
-  {
-    id: "p8",
-    title: "Long Island City High-Rise Condo",
-    address: "42-12 27th St #2201",
-    city: "Long Island City",
-    state: "NY",
-    zip: "11101",
-    price: 985_000,
-    status: "for-sale",
-    type: "condo",
-    beds: 1,
-    baths: 1,
-    sqft: 820,
-    yearBuilt: 2019,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b69595dd363d.jpg",
-    gallery: [
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b69595dd363d.jpg",
-      "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4b0af0ce13af.jpg",
-    ],
-    isNew: true,
-    agentId: "a3",
-    description:
-      "22nd-floor condo with sweeping Manhattan skyline views. Floor-to-ceiling windows, designer kitchen, and a private balcony. Building amenities include pool, gym, and rooftop lounge.",
-    amenities: ["Skyline View", "Balcony", "Pool", "Gym", "Rooftop Lounge"],
-  },
-  {
-    id: "p9",
-    title: "Hudson Valley Building Lot",
-    address: "Lot 7 Eagle Ridge Rd",
-    city: "Woodstock",
-    state: "NY",
-    zip: "12498",
-    price: 285_000,
-    status: "for-sale",
-    type: "land",
-    sqft: 87_120,
-    lotSize: "2.0 ac",
-    yearBuilt: 0,
-    beds: 0,
-    baths: 0,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/277feec00017.jpeg",
-    gallery: ["https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/277feec00017.jpeg"],
-    agentId: "a1",
-    description:
-      "Buildable 2-acre lot in the Catskills with sweeping mountain views. Utilities at the street, approved perc test, and gentle slope ideal for a custom build. Easy access to Woodstock and Kingston.",
-    amenities: ["Mountain View", "Utilities Available", "Perc Approved", "2.0 ac"],
-  },
-  {
-    id: "p10",
-    title: "Midtown Manhattan Office Suite",
-    address: "1 Penn Plaza, Suite 1500",
-    city: "Manhattan",
-    state: "NY",
-    zip: "10119",
-    price: 14_500,
-    status: "for-rent",
-    type: "commercial",
-    sqft: 3200,
-    yearBuilt: 1972,
-    beds: 0,
-    baths: 2,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1ba97698b57c.jpg",
-    gallery: ["https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1ba97698b57c.jpg"],
-    isNew: true,
-    agentId: "a2",
-    description:
-      "Class A office suite on the 15th floor of 1 Penn Plaza. Pre-built with 8 private offices, conference room, and open workstations. 24/7 building access, on-site parking, and direct subway access.",
-    amenities: ["Penn Station Access", "Parking", "Conference Room", "24/7 Access", "Café"],
-  },
-  {
-    id: "p11",
-    title: "Astoria Family Home with Yard",
-    address: "418 31st St",
-    city: "Astoria",
-    state: "NY",
-    zip: "11103",
-    price: 1_295_000,
-    status: "for-sale",
-    type: "house",
-    beds: 3,
-    baths: 2,
-    sqft: 1640,
-    lotSize: "0.12 ac",
-    yearBuilt: 1998,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/28522449d8e8.jpg",
-    gallery: ["https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/28522449d8e8.jpg"],
-    agentId: "a3",
-    description:
-      "Charming detached home in Astoria with private driveway and backyard. Renovated kitchen with shaker cabinets and quartz counters. Finished basement and roof deck with Manhattan views.",
-    amenities: ["Backyard", "Driveway", "Roof Deck", "Renovated Kitchen", "Finished Basement"],
-  },
-  {
-    id: "p12",
-    title: "Newark Commercial Retail Space",
-    address: "550 Broad St",
-    city: "Newark",
-    state: "NJ",
-    zip: "07102",
-    price: 6_800,
-    status: "for-rent",
-    type: "commercial",
-    sqft: 2400,
-    yearBuilt: 2010,
-    beds: 0,
-    baths: 1,
-    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1ba97698b57c.jpg",
-    gallery: ["https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1ba97698b57c.jpg"],
-    agentId: "a2",
-    description:
-      "Ground-floor retail space on busy Broad Street in downtown Newark. High foot traffic, excellent visibility, and large storefront windows. Adjacent to NJ Transit and universities.",
-    amenities: ["High Foot Traffic", "Storefront Windows", "NJ Transit Access", "Parking Nearby"],
-  },
-];
-
-export interface Agent {
-  id: string;
-  name: string;
-  title: string;
-  phone: string;
-  email: string;
-  image: string;
-  sales: number;
-  rating: number;
-  specialties: string[];
-  office: string;
-}
-
-export const AGENTS: Agent[] = [
-  {
-    id: "a1",
-    name: "Sarah Mitchell",
-    title: "Senior Listing Agent · NY",
-    phone: "(212) 555-0184",
-    email: "sarah.mitchell@estata.com",
-    image: AGENT_IMAGES[0],
-    sales: 248,
-    rating: 4.9,
-    specialties: ["Luxury Homes", "Manhattan", "Hamptons"],
-    office: "Manhattan, NY",
-  },
-  {
-    id: "a2",
-    name: "James Okonkwo",
-    title: "Commercial Specialist · NJ",
-    phone: "(973) 555-0199",
-    email: "james.okonkwo@estata.com",
-    image: AGENT_IMAGES[1],
-    sales: 187,
-    rating: 4.8,
-    specialties: ["Commercial", "Investment", "Newark"],
-    office: "Jersey City, NJ",
-  },
-  {
-    id: "a3",
-    name: "Elena Rossi",
-    title: "Urban Properties Expert · Brooklyn",
-    phone: "(718) 555-0142",
-    email: "elena.rossi@estata.com",
-    image: AGENT_IMAGES[2],
-    sales: 312,
-    rating: 5.0,
-    specialties: ["Condos", "Lofts", "Rentals"],
-    office: "Brooklyn, NY",
-  },
-  {
-    id: "a4",
-    name: "Marcus Chen",
-    title: "Luxury & Waterfront · Hamptons",
-    phone: "(631) 555-0167",
-    email: "marcus.chen@estata.com",
-    image: AGENT_IMAGES[3],
-    sales: 156,
-    rating: 4.9,
-    specialties: ["Waterfront", "Luxury", "Hamptons"],
-    office: "Southampton, NY",
-  },
-];
-
-export interface Insight {
-  id: string;
-  title: string;
-  excerpt: string;
-  category: "Market Trends" | "Buyer Tips" | "Seller Tips" | "Financing";
-  date: string;
-  readTime: string;
-  image: string;
-}
-
-export const INSIGHTS: Insight[] = [
-  {
-    id: "i1",
-    title: "NYC & NJ Housing Market 2024: What Buyers Should Expect",
-    excerpt:
-      "Mortgage rates are stabilizing and inventory is climbing across the NY/NJ metro. Here's how the rest of the year is shaping up — and what it means for your next move in Manhattan, Brooklyn, or Jersey City.",
-    category: "Market Trends",
-    date: "Sep 12, 2024",
-    readTime: "6 min read",
-    image: INSIGHTS_IMAGES[0],
-  },
-  {
-    id: "i2",
-    title: "5 First-Time Buyer Mistakes in the NY/NJ Market",
-    excerpt:
-      "From skipping pre-approval to underestimating closing costs, first-time buyers in NYC and NJ often stumble on the same hurdles. Use this checklist to side-step the most common pitfalls.",
-    category: "Buyer Tips",
-    date: "Aug 28, 2024",
-    readTime: "4 min read",
-    image: INSIGHTS_IMAGES[1],
-  },
-  {
-    id: "i3",
-    title: "How to Price Your Home in a Shifting NY/NJ Market",
-    excerpt:
-      "Pricing strategy can make or break your sale in Brooklyn, Hoboken, or Long Island. Learn how local comps, days-on-market trends, and condition adjustments should inform your list price.",
-    category: "Seller Tips",
-    date: "Aug 14, 2024",
-    readTime: "5 min read",
-    image: INSIGHTS_IMAGES[2],
-  },
-];
-
-// Stats focused on NY/NJ coverage
-export const STATS = [
-  { value: "48K+", label: "NY/NJ Listings" },
-  { value: "2.1M", label: "Homes Sold" },
-  { value: "1,200", label: "Local Agents" },
-  { value: "62", label: "NY + NJ Cities" },
-];
-
-export const CATEGORIES = [
-  {
-    key: "house" as ListingType,
-    label: "Homes for Sale",
-    count: "18,420 listings",
-    image: CATEGORY_IMAGES.homes,
-    description: "Single-family houses, townhomes, and brownstones",
-  },
-  {
-    key: "condo" as ListingType,
-    label: "Condos & Apartments",
-    count: "22,540 listings",
-    image: CATEGORY_IMAGES.condos,
-    description: "Modern condos, lofts, and co-ops",
-  },
-  {
-    key: "land" as ListingType,
-    label: "Land & Lots",
-    count: "3,880 listings",
-    image: CATEGORY_IMAGES.land,
-    description: "Buildable lots and acreage in NY/NJ",
-  },
-  {
-    key: "commercial" as ListingType,
-    label: "Commercial",
-    count: "4,420 listings",
-    image: CATEGORY_IMAGES.commercial,
-    description: "Office, retail, and mixed-use space",
-  },
-];
-
-export function formatPrice(price: number, status?: ListingStatus): string {
-  if (status === "for-rent") {
-    return `$${price.toLocaleString("en-US")}/mo`;
-  }
-  if (price >= 1_000_000) {
-    return `$${(price / 1_000_000).toFixed(2)}M`;
-  }
-  if (price >= 1_000) {
-    return `$${(price / 1_000).toFixed(0)}K`;
-  }
-  return `$${price.toLocaleString("en-US")}`;
-}
-
-export function formatPriceFull(price: number, status?: ListingStatus): string {
-  const suffix = status === "for-rent" ? "/mo" : "";
-  return `$${price.toLocaleString("en-US")}${suffix}`;
-}
-
-// Validation helper — enforce NY/NJ only
-export function isValidState(state: string): state is SupportedState {
-  return (SUPPORTED_STATES as readonly string[]).includes(state.toUpperCase());
-}
+// Editable site content for Grace Choi Real Estate (Bergen County, NJ).
+// Everything here is the default ("seed") content. The admin editor can
+// override it; see src/store/search-store.ts.
 
 // ============================================================
 // Editable Site Content Model
-// All text + images on the public site can be edited from admin.
 // ============================================================
 
 export interface HeroContent {
@@ -571,22 +11,11 @@ export interface HeroContent {
   headline: string;
   subline: string;
   backgroundImage: string;
-  trustBadge1: string;
-  trustBadge2: string;
-  trustBadge3: string;
 }
 
 export interface StatItem {
   value: string;
   label: string;
-}
-
-export interface CategoryItem {
-  key: ListingType;
-  label: string;
-  count: string;
-  image: string;
-  description: string;
 }
 
 export interface WhyUsContent {
@@ -596,49 +25,17 @@ export interface WhyUsContent {
   features: { title: string; description: string }[];
 }
 
-export interface AgentSectionContent {
-  eyebrow: string;
-  title: string;
-  description: string;
-  browseAllButton: string;
-}
-
-export interface InsightItem {
-  id: string;
-  title: string;
-  excerpt: string;
-  category: "Market Trends" | "Buyer Tips" | "Seller Tips" | "Financing";
-  date: string;
-  readTime: string;
-  image: string;
-}
-
-export interface InsightsContent {
-  eyebrow: string;
-  title: string;
-  description: string;
-  allArticlesButton: string;
-  articles: InsightItem[];
-}
-
 export interface CtaContent {
   badge: string;
   title: string;
   description: string;
   primaryButton: string;
   secondaryButton: string;
-  statValue: string;
-  statLabel: string;
-  subStat1Value: string;
-  subStat1Label: string;
-  subStat2Value: string;
-  subStat2Label: string;
 }
 
 export interface FooterContent {
   brandDescription: string;
-  newsletterTitle: string;
-  newsletterSubtitle: string;
+  email: string;
   phone: string;
   legalText: string;
 }
@@ -663,133 +60,74 @@ export interface GuidePageContent {
 export interface SiteContent {
   hero: HeroContent;
   stats: StatItem[];
-  categories: CategoryItem[];
   whyUs: WhyUsContent;
-  agentSection: AgentSectionContent;
-  insights: InsightsContent;
   cta: CtaContent;
   footer: FooterContent;
-  // Agents are also editable (text + image + contact)
-  agents: Agent[];
-  // Guide pages (seller, buyer, rent, mortgage, townhouse-condo, real-estate-info)
+  // Guide pages (seller, buyer)
   guides: Record<string, GuidePageContent>;
 }
 
+// Default copy is intentionally plain and factual. Grace should replace it
+// with her own wording (license info, experience, etc.) from the admin editor.
 export const SEED_SITE_CONTENT: SiteContent = {
   hero: {
-    badge: "Trusted by NY/NJ homeowners",
+    badge: "Bergen County, NJ · 한국어 / English",
     headline: "GRACE will lead you home.\nHappy closing with GRACE.",
     subline:
-      "Browse thousands of homes, condos, land, and commercial properties across New York and New Jersey — backed by 1,200+ trusted local agents.",
+      "Buying or selling in Bergen County? Get clear, bilingual guidance on pricing, closing costs, towns, and schools — from first question to closing day.",
     backgroundImage:
       "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/98695e19f9f5.jpg",
-    trustBadge1: "Verified listings only",
-    trustBadge2: "1,200+ vetted NY/NJ agents",
-    trustBadge3: "Updated every 15 min",
   },
   stats: [
-    { value: "48K+", label: "NY/NJ Listings" },
-    { value: "2.1M", label: "Homes Sold" },
-    { value: "1,200", label: "Local Agents" },
-    { value: "62", label: "NY + NJ Cities" },
-  ],
-  categories: [
-    {
-      key: "house",
-      label: "Homes for Sale",
-      count: "18,420 listings",
-      image: CATEGORY_IMAGES.homes,
-      description: "Single-family houses, townhomes, and brownstones",
-    },
-    {
-      key: "condo",
-      label: "Condos & Apartments",
-      count: "22,540 listings",
-      image: CATEGORY_IMAGES.condos,
-      description: "Modern condos, lofts, and co-ops",
-    },
-    {
-      key: "land",
-      label: "Land & Lots",
-      count: "3,880 listings",
-      image: CATEGORY_IMAGES.land,
-      description: "Buildable lots and acreage in NY/NJ",
-    },
-    {
-      key: "commercial",
-      label: "Commercial",
-      count: "4,420 listings",
-      image: CATEGORY_IMAGES.commercial,
-      description: "Office, retail, and mixed-use space",
-    },
+    { value: "70", label: "Bergen County towns in our guide" },
+    { value: "2", label: "Languages · 한국어 / English" },
+    { value: "Sell", label: "Seller guide + closing cost calculator" },
+    { value: "Buy", label: "Buyer guide + closing cost calculator" },
   ],
   whyUs: {
     eyebrow: "Why Grace Choi",
-    title: "The trusted name in NY & NJ real estate",
+    title: "Local, bilingual, and with you through closing",
     description:
-      "We've helped thousands of families across New York and New Jersey find their next home. Here's what makes the Grace Choi experience different.",
+      "Real estate decisions are big. Grace explains each step in Korean or English so you always know what comes next.",
     features: [
       {
-        title: "Verified listings",
+        title: "Bilingual guidance",
         description:
-          "Every listing is checked for accuracy by our quality team before going live. No stale inventory, no fake photos, no surprises at the showing.",
+          "Contracts, inspections, attorney review, and closing explained in Korean or English — whichever you are more comfortable with.",
       },
       {
-        title: "Top-rated agents",
+        title: "Local town knowledge",
         description:
-          "Work with the top 5% of local agents — vetted, reviewed, and rated by real buyers and sellers in your market. We match you based on your goals.",
+          "Town and school information for all 70 Bergen County municipalities, so you can compare neighborhoods with real data.",
       },
       {
-        title: "Secure transactions",
+        title: "Clear cost estimates",
         description:
-          "From offer to closing, your data and documents are protected with bank-grade encryption and a transparent audit trail.",
+          "Seller and buyer closing cost calculators built around New Jersey fees and transfer taxes.",
       },
       {
-        title: "Support 7 days a week",
+        title: "Direct contact",
         description:
-          "Real humans on live chat, email, and phone from 7am to 9pm — plus a self-serve help center with 200+ articles.",
+          "Your inquiry goes straight to Grace — no call center, no hand-off.",
       },
     ],
   },
-  agentSection: {
-    eyebrow: "Meet the team",
-    title: "Find an agent who knows your market",
-    description:
-      "Top-rated, vetted, and reviewed. Connect with a local expert who understands your neighborhood, your goals, and your timeline.",
-    browseAllButton: "Browse all 1,200 agents",
-  },
-  insights: {
-    eyebrow: "Grace Choi Insights",
-    title: "Market trends, buyer tips & more",
-    description:
-      "Make smarter decisions with data-driven market analysis, expert perspectives, and practical guides — written by our agents and research team.",
-    allArticlesButton: "All articles",
-    articles: INSIGHTS,
-  },
   cta: {
-    badge: "List with Grace Choi",
-    title: "Ready to sell or rent out your property?",
+    badge: "Talk with Grace",
+    title: "Thinking about buying or selling?",
     description:
-      "Reach 12M+ qualified buyers and tenants in days, not months. Get a free, no-obligation valuation from a local Grace Choi agent — typically in under 24 hours.",
-    primaryButton: "Get a free valuation",
-    secondaryButton: "See pricing",
-    statValue: "12M+",
-    statLabel: "Monthly buyers searching Grace Choi",
-    subStat1Value: "3.2%",
-    subStat1Label: "Avg. days on market",
-    subStat2Value: "98%",
-    subStat2Label: "Client satisfaction",
+      "Send a short note about your plans and timeline. Grace will get back to you personally.",
+    primaryButton: "Send an inquiry",
+    secondaryButton: "Explore towns & schools",
   },
   footer: {
     brandDescription:
-      "The trusted name in NY/NJ real estate. Browse thousands of listings across New York and New Jersey, work with 1,200+ vetted agents, and find a place you'll love to call home.",
-    newsletterTitle: "Get market insights weekly",
-    newsletterSubtitle: "No spam. Unsubscribe anytime.",
+      "Grace Choi Real Estate — bilingual (Korean / English) real estate guidance for buyers and sellers in Bergen County, New Jersey.",
+    email: "gracechoihappy@gmail.com",
     phone: "201.282.8640",
     legalText:
-      "Grace Choi Real Estate — serving New York and New Jersey with care and expertise.",
+      "Town and school data courtesy of NJStreet (njstreet.com), used with permission. Figures are historical and may not reflect current conditions.",
   },
-  agents: AGENTS,
   guides: {
     sell: {
       eyebrow: "Seller Guide · 셀러 가이드",
@@ -1089,54 +427,6 @@ export const SEED_SITE_CONTENT: SiteContent = {
         },
       ],
     },
-    rent: {
-      eyebrow: "Rent Guide · 렌트 가이드",
-      title: "Rent smarter in NY & NJ.",
-      intro:
-        "From apartment hunting to lease signing, here's how to find a rental you'll love — without getting burned by hidden fees or shady landlords.",
-      heroImage:
-        "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/97ce4879fca1.jpg",
-      ctaTitle: "Looking for a rental?",
-      ctaDescription:
-        "Send your criteria and budget — a Grace Choi agent will send you a curated list of matching rentals within 24 hours.",
-      sections: [],
-    },
-    mortgage: {
-      eyebrow: "Mortgage Center · 모기지 센터",
-      title: "Understand your mortgage options.",
-      intro:
-        "From conventional loans to FHA, VA, and jumbo — here's how to pick the right mortgage for your NY/NJ home purchase and lock the best rate.",
-      heroImage:
-        "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3021aa3fd22d.png",
-      ctaTitle: "Get pre-approved today",
-      ctaDescription:
-        "Submit your info and we'll connect you with a NY/NJ lender who can deliver a pre-approval letter within 48 hours.",
-      sections: [],
-    },
-    "townhouse-condo": {
-      eyebrow: "Property Types · 주택 유형",
-      title: "Townhouse, condo, or co-op — what's right for you?",
-      intro:
-        "Each property type has different ownership rights, costs, and approval processes. Here's how to choose the right one in the NY/NJ market.",
-      heroImage:
-        "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/48df8199c960.jpg",
-      ctaTitle: "Considering a townhouse or condo?",
-      ctaDescription:
-        "Tell us your preferences and a Grace Choi agent will curate options that match your lifestyle and budget.",
-      sections: [],
-    },
-    "real-estate-info": {
-      eyebrow: "Real Estate Info · 부동산 정보",
-      title: "The NY/NJ real estate landscape, decoded.",
-      intro:
-        "Market trends, transfer taxes, attorney requirements, rent stabilization — the rules vary county by county. Here's a clear overview to help you make informed decisions.",
-      heroImage:
-        "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d4a79604eb37.jpg",
-      ctaTitle: "Have a specific question?",
-      ctaDescription:
-        "Real estate laws change. Reach out and a Grace Choi agent will get you the most current answer for your situation.",
-      sections: [],
-    },
   },
 };
 
@@ -1144,4 +434,3 @@ export const SEED_SITE_CONTENT: SiteContent = {
 export function cloneContent(c: SiteContent): SiteContent {
   return JSON.parse(JSON.stringify(c));
 }
-
